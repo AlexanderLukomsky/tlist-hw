@@ -3,9 +3,5 @@ type ButtonType = {
     title: string
 }
 export const Button = ({ callback, title, ...props }: ButtonType) => {
-    return (
-        <>
-            <button onClick={callback}>{title}</button>
-        </>
-    )
+    return <button onClick={callback}>{title}</button>
 }

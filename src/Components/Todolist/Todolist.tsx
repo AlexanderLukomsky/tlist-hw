@@ -1,13 +1,10 @@
 import { ChangeEvent, useState, KeyboardEvent } from "react"
+import { FilterType } from "../../reducer/todolistReducer"
+import { AddItemForm } from "../AddItemForm/AddItemForm"
 import { Button } from "../Button/Button"
-import { Input } from "../Input/Input"
 import style from './Todolist.module.css'
-export type TodolistType = {
-    todolistID: string
-    title: string
-    filter: FilterType
-}
-export type FilterType = 'all' | 'active' | 'completed'
+
+
 type TasksPropsType = {
     taskID: string
     title: string
@@ -25,21 +22,6 @@ type TodolistPropsType = {
     deleteTodlist: (todolistID: string) => void
 }
 export const Todolist = (props: TodolistPropsType) => {
-    const [error, setError] = useState<null | string>('')
-    const [titleValue, setTitleValue] = useState('')
-    const addNewTask = (todolistID: string, titleValue: string) => {
-        if (titleValue.trim() !== "") {
-            props.addTask(todolistID, titleValue.trim())
-            setTitleValue('')
-            return
-        }
-        setError('Title is required')
-        setTitleValue('')
-    }
-    const addNewTaskKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null)
-        e.key === 'Enter' && addNewTask(props.todolistID, titleValue)
-    }
     const changeFilter = (todolistID: string, filter: FilterType) => {
         props.changeFilter(todolistID, filter)
     }
@@ -50,16 +32,14 @@ export const Todolist = (props: TodolistPropsType) => {
             default: return tasks
         }
     }
+    const addNewTask = (todolistID: string, title: string) => {
+        props.addTask(todolistID, title.trim())
+    }
+
     return (
         <div>
             <h3>{props.title} <button onClick={() => { props.deleteTodlist(props.todolistID) }}>X</button> </h3>
-            <div>
-                <span className={error ? style.error : ''}>
-                    <Input value={titleValue} onKeyPress={addNewTaskKeyPress} onChange={(event) => { setTitleValue(event.currentTarget.value) }} />
-                </span>
-                <button onClick={() => { addNewTask(props.todolistID, titleValue) }}>+</button>
-            </div>
-            {error && <span className={style.error_message}>{error}</span>}
+            <AddItemForm callback={(title) => { addNewTask(props.todolistID, title) }} />
             <ul>
                 {
                     filteredTask(props.tasks, props.filterValue).map(el =>
