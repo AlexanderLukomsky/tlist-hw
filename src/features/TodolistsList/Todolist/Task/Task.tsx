@@ -1,15 +1,36 @@
-import { useState } from "react"
+import React, { ChangeEvent, useState } from "react"
+import { Button } from "../../../../components/Buttons"
+import { Checkbox } from "../../../../components/Checkbox"
+import { ConvertTitle } from "../../../../components/ConvertTitle/ConvertTitle"
+import { TaskStatus, TaskType } from "../../../../types/TaskType"
 
 type TaskPropsType = {
-    task: { title: string, isDone: boolean }
+    task: TaskType
+    deleteTask: (payload: { todolistID: string, taskID: string }) => void
+    changeTaskStatus: (payload: { todolistID: string, taskID: string, status: boolean }) => void
+    changeTaskTitle: (payload: { todolistID: string, taskID: string, taskModel: { title: string } }) => void
 }
-export const Task: React.FC<TaskPropsType> = (props) => {
-    const [checked, setChecked] = useState<boolean>(props.task.isDone)
+export const Task: React.FC<TaskPropsType> = ({ task, ...props }) => {
+    const convertToBooleanStatus = (status: TaskStatus) => {
+        switch (status) {
+            case TaskStatus.Completed: return true
+            case TaskStatus.NotCompleted: return false
+            default: return false
+        }
+    }
     return (
-        <div>
-            <input type="checkbox" checked={checked} onChange={() => { setChecked(!checked) }} />
-            {props.task.title}
-            <button>delete </button>
-        </div>
+        <>
+            <Checkbox
+                checked={convertToBooleanStatus(task.status)}
+                onChange={(status: boolean) => { props.changeTaskStatus({ todolistID: task.todoListId, taskID: task.id, status }) }}
+            />
+            <ConvertTitle title={task.title} callback={(title) => { props.changeTaskTitle({ todolistID: task.todoListId, taskID: task.id, taskModel: { title } }) }} />
+            <span className="task__button">
+                <Button title={''}
+                    callback={() => { props.deleteTask({ todolistID: task.todoListId, taskID: task.id }) }}
+                />
+            </span>
+
+        </>
     )
 }
