@@ -1,6 +1,7 @@
 @import "./styles/reset";
 @import "./styles/todolists.scss";
-@import "./App.scss";
+@import "./App/App.scss";
+@import "./components/snackbar/snackbar.scss";
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",

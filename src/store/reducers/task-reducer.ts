@@ -1,5 +1,6 @@
+import { setErrorAC, SetErrorACType } from './app-reducer';
 import { AppRootStoreType } from './../store';
-import { SetTodolistsACType } from './todolist-reducer';
+import { DeleteTodolistACType, SetTodolistsACType, CreateTodolistACType, ChangeTodolistRequestStatusACType, changeTodolistRequestStatusAC } from './todolist-reducer';
 import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType, UpdateTaskType } from './../../types/TaskType';
 import { Dispatch } from 'redux';
 import { task_api } from '../../api/task-api';
@@ -7,13 +8,18 @@ import { task_api } from '../../api/task-api';
 
 export const taskReducer = (state: TasksStateType = {}, action: TaskReducerActionType): TasksStateType => {
     switch (action.type) {
-        case 'SET-TODOLISTS':
+        case 'SET-TODOLISTS': {
             const stateCopy = { ...state }
             action.todolists.forEach(t => stateCopy[t.id] = [])
             return stateCopy
-        case 'SET-TASKS': {
-            return { ...state, [action.payload.todolistID]: action.payload.tasks }
         }
+        case 'DELETE-TODOLIST': {
+            const stateCopy = { ...state }
+            delete stateCopy[action.todolistID]
+            return stateCopy
+        }
+        case 'CREATE-TODOLIST': return { [action.todolist.id]: [], ...state }
+        case 'SET-TASKS': return { ...state, [action.payload.todolistID]: action.payload.tasks }
         case 'CREATE-TASK': return {
             ...state,
             [action.task.todoListId]: [
@@ -61,10 +67,30 @@ export const fetchTasksTC = (todolistID: string) => (dispatch: Dispatch<SetTasks
             dispatch(setTasksAC({ todolistID, tasks: res.data.items }))
         })
 }
-export const createTaskTC = (payload: { todolistID: string, title: string }) => (dispatch: Dispatch<CreateTaskACType>) => {
+export const createTaskTC = (payload: { todolistID: string, title: string }) => (dispatch: Dispatch<CreateTaskACType | SetErrorACType | ChangeTodolistRequestStatusACType>) => {
+    dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'loading' }))
     task_api.createTask(payload)
         .then(res => {
-            dispatch(createTaskAC(res.data.data.item))
+            if (res.data.resultCode === 0) {
+                dispatch(createTaskAC(res.data.data.item))
+                dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'successful' }))
+            }
+            if (res.data.resultCode !== 0) {
+                if (res.data.messages.length > 0) {
+                    dispatch(setErrorAC(res.data.messages))
+                } else {
+                    dispatch(setErrorAC('some error'))
+                }
+                dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'idle' }))
+            }
+        })
+        .catch((error) => {
+            if (error.message) {
+                dispatch(setErrorAC(error.message))
+            } else {
+                dispatch(setErrorAC('Some Error'))
+            }
+            dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'idle' }))
         })
 }
 export const deleteTaskTC = (payload: { todolistID: string, taskID: string }) => (dispatch: Dispatch<DeleteTaskACType>) => {
@@ -74,7 +100,7 @@ export const deleteTaskTC = (payload: { todolistID: string, taskID: string }) =>
         })
 }
 export const updateTaskTC = (payload: { todolistID: string, taskID: string, taskModel: UpdateTaskOptionalPropertiesType }) =>
-    (dispatch: Dispatch<UpdateTaskACType>, getState: () => AppRootStoreType) => {
+    (dispatch: Dispatch<ThunkDispatchActionType>, getState: () => AppRootStoreType) => {
         const task = getState().tasks[payload.todolistID]
             .find(t => t.id === payload.taskID)
         if (!task) throw new Error('task not found')
@@ -88,8 +114,17 @@ export const updateTaskTC = (payload: { todolistID: string, taskID: string, task
             ...payload.taskModel
         }
         task_api.updateTask({ todolistID: payload.todolistID, taskID: payload.taskID, task: model })
-            .then(() => {
-                dispatch(updateTaskAC({ todolistID: payload.todolistID, taskID: payload.taskID, taskModel: payload.taskModel }))
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    dispatch(updateTaskAC({ todolistID: payload.todolistID, taskID: payload.taskID, taskModel: payload.taskModel }))
+                } else {
+                    if (res.data.messages.length > 0) {
+                        dispatch(setErrorAC(res.data.messages))
+                    } else {
+                        dispatch(setErrorAC('some error'))
+                    }
+                }
+
             })
     }
 //types
@@ -99,7 +134,12 @@ type TaskReducerActionType =
     | CreateTaskACType
     | DeleteTaskACType
     | UpdateTaskACType
+    | DeleteTodolistACType
+    | CreateTodolistACType
 type SetTasksACType = ReturnType<typeof setTasksAC>
 type CreateTaskACType = ReturnType<typeof createTaskAC>
 type DeleteTaskACType = ReturnType<typeof deleteTaskAC>
 type UpdateTaskACType = ReturnType<typeof updateTaskAC>
+type ThunkDispatchActionType =
+    | UpdateTaskACType
+    | SetErrorACType 

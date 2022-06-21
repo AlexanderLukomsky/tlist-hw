@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button } from "../Buttons"
+import { Button } from "../Button/Buttons"
 type ThemePropsType = {
     callback: (theme: 'white' | 'dark') => void
     theme: 'white' | 'dark'

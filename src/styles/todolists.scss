@@ -1,3 +1,33 @@
+.add-todolist {
+    padding: 20px 0px;
+    .addItem {
+        display: flex;
+        align-items: center;
+        &__value {
+            padding: 5px;
+            box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset, rgba(41, 40, 40, 0.171) -3px -3px 6px 1px inset;
+            border: 1px solid rgba(27, 27, 27, 0.295);
+            margin-right: 10px;
+            max-width: 300px;
+            width: 100%;
+            border-radius: 5px;
+        }
+        &__add {
+            border: 3px solid rgba(27, 27, 27, 0.295);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            button {
+                width: 20px;
+                height: 20px;
+                mask-image: url("../assets/addIcon.svg");
+                background-color: #000;
+                box-shadow: rgb(204, 219, 232) 5px 6px 8px 2px inset, rgba(41, 40, 40, 0.171) -3px -3px 6px 1px inset;
+            }
+        }
+    }
+}
 .todolists-list {
     display: flex;
     flex-wrap: wrap;
@@ -9,6 +39,7 @@
     width: 100%;
 }
 .todolist {
+    position: relative;
     box-shadow: 1px 3px 8px #000;
     border: 1px solid transparent;
     border-radius: 5px;
@@ -18,6 +49,18 @@
     flex-direction: column;
     width: 100%;
     padding: 10px;
+    .delete-button {
+        button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            mask-image: url("../assets/trash.svg");
+            background-color: #000;
+            mask-repeat: no-repeat;
+        }
+    }
     &__title {
         padding-bottom: 5px;
         text-align: center;
@@ -25,6 +68,31 @@
         font-weight: 500;
         word-wrap: break-word;
         min-height: 50px;
+        .convertTitle {
+            display: inline-block;
+            cursor: pointer;
+            &__input {
+                border: 1px solid black;
+                border-radius: 3px;
+                padding: 3px;
+                margin-right: 3px;
+                &::placeholder {
+                    color: #f00505;
+                }
+            }
+            &__button {
+                width: 20px;
+                height: 20px;
+                background-color: #1d1c1c;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 4px;
+                padding: 3px;
+                color: #f00505;
+                font-size: 18px;
+            }
+        }
     }
     &__addItem {
         position: relative;
@@ -58,7 +126,6 @@
                 }
             }
             &__error {
-                content: "";
                 position: absolute;
                 bottom: 0;
                 left: 0;
@@ -95,25 +162,26 @@
                 letter-spacing: 0.5px;
                 word-wrap: break-word;
             }
-            &__changeMode {
-                input {
-                    padding: 2px;
-                    border-radius: 3px;
-                    margin-right: 5px;
-                }
-                button {
-                    border-radius: 50%;
-                    color: #fff;
-                    width: 12px;
-                    height: 12px;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    background-color: #000;
+            &__input {
+                padding: 2px;
+                border-radius: 3px;
+                margin-right: 5px;
+                &::placeholder {
+                    color: #f00505;
                 }
             }
+            &__button {
+                border-radius: 50%;
+                color: #fff;
+                width: 12px;
+                height: 12px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #000;
+            }
         }
-        &__button {
+        &__delete {
             content: "";
             position: absolute;
             top: -10px;
@@ -123,16 +191,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            button {
-                width: 100%;
-                width: 20px;
-                height: 20px;
-                mask-image: url("../assets/trash.svg");
-                mask-repeat: no-repeat;
-                background-color: #000;
-                mask-position: center;
-                mask-size: contain;
-            }
         }
     }
     &__filter {
@@ -168,6 +226,11 @@
 }
 .dark {
     .todolist {
+        & .delete-button {
+            button {
+                background-color: #fff;
+            }
+        }
         &__addItem {
             .addItem {
                 &__value {
@@ -178,13 +241,6 @@
                         background-color: rgba(146, 1, 1, 0.945);
                         border: 1px solid transparent;
                     }
-                }
-            }
-        }
-        & .task {
-            &__button {
-                button {
-                    background-color: #fff;
                 }
             }
         }

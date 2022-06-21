@@ -1,32 +1,36 @@
-import React, { useEffect, useState } from "react"
+import React, { MouseEvent, useEffect, useState } from "react"
+import spinner from '../../../assets/spinner.svg'
 import { useDispatch } from "react-redux"
 import { AddItem } from "../../../components/AddItem/AddItem"
-import { Button } from "../../../components/Buttons"
+import { Button } from "../../../components/Button/Buttons"
 import { ConvertTitle } from "../../../components/ConvertTitle/ConvertTitle"
 import { Switcher } from "../../../components/Switcher"
 import { createTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC } from "../../../store/reducers/task-reducer"
-import { changeTodolistTitleTC } from "../../../store/reducers/todolist-reducer"
+import { changeTodolistTitleTC, deleteTodolistTC } from "../../../store/reducers/todolist-reducer"
 import { TaskStatus, TaskType } from "../../../types/TaskType"
+import { TodolistType } from "../../../types/TodolistType"
 import { Task } from "./Task/Task"
 type FilterValueType = 'all' | 'active' | 'completed'
 type TodolistPropsType = {
-    todolistID: string
+    todolist: TodolistType
     tasks: TaskType[]
-    todoTitle: string
 }
-export const Todolist: React.FC<TodolistPropsType> = React.memo((props: TodolistPropsType) => {
+export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...props }: TodolistPropsType) => {
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(fetchTasksTC(props.todolistID))
+        dispatch(fetchTasksTC(todolist.id))
     }, [])
     const [filterValue, setFilterValue] = useState<FilterValueType>('all')
     //dispatch todolist TC
     const changeTodolistTitle = (payload: { title: string, todolistID: string }) => {
         dispatch(changeTodolistTitleTC(payload))
     }
+    const deleteTodolist = (todolistID: string) => {
+        dispatch(deleteTodolistTC(todolistID))
+    }
     //dispatch task TC
     const createTask = (title: string) => {
-        dispatch(createTaskTC({ todolistID: props.todolistID, title }))
+        dispatch(createTaskTC({ todolistID: todolist.id, title }))
     }
     const deleteTask = (payload: { todolistID: string, taskID: string }) => {
         dispatch(deleteTaskTC(payload))
@@ -54,21 +58,25 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo((props: Todolist
             default: return tasks
         }
     }
-
+    const disabledTodo = todolist.requestStatus === 'loading'
     return (
         <div className="todolist-wrapper">
             <div className="todolist">
+                <div className="todolist__delete delete-button ">
+                    <Button title='' disabled={disabledTodo} callback={() => { deleteTodolist(todolist.id) }} />
+                </div>
                 <div className="todolist__title">
-                    <ConvertTitle title={props.todoTitle} callback={(title) => changeTodolistTitle({ title, todolistID: props.todolistID })} />
+                    <ConvertTitle disabled={disabledTodo} title={todolist.title} callback={(title) => changeTodolistTitle({ title, todolistID: todolist.id })} />
                 </div>
                 <div className="todolist__addItem">
-                    <AddItem callback={createTask} />
+                    <AddItem callback={createTask} disabled={disabledTodo} convertInput={true} />
                 </div>
                 <ul className="todolist__tasks">
                     {
                         sortedTask(props.tasks, filterValue).map(task =>
                             <li className="todolist__task task" key={task.id}>
                                 <Task
+                                    todolistRequestStatus={disabledTodo}
                                     task={task}
                                     deleteTask={deleteTask}
                                     changeTaskStatus={changeTaskStatus}
