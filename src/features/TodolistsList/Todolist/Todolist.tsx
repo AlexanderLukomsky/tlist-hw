@@ -1,15 +1,16 @@
+import { Delete } from "@mui/icons-material"
+import { IconButton } from "@mui/material"
 import React, { MouseEvent, useEffect, useState } from "react"
-import spinner from '../../../assets/spinner.svg'
 import { useDispatch } from "react-redux"
 import { AddItem } from "../../../components/AddItem/AddItem"
-import { Button } from "../../../components/Button/Buttons"
-import { ConvertTitle } from "../../../components/ConvertTitle/ConvertTitle"
-import { Switcher } from "../../../components/Switcher"
+import { ChangeableTitle } from "../../../components/ChangeableTitle/ChangeableTitle"
+import { Switcher } from "../../../components/Switcher/Switcher"
 import { createTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC } from "../../../store/reducers/task-reducer"
 import { changeTodolistTitleTC, deleteTodolistTC } from "../../../store/reducers/todolist-reducer"
 import { TaskStatus, TaskType } from "../../../types/TaskType"
 import { TodolistType } from "../../../types/TodolistType"
 import { Task } from "./Task/Task"
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 type FilterValueType = 'all' | 'active' | 'completed'
 type TodolistPropsType = {
     todolist: TodolistType
@@ -63,27 +64,28 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...
         <div className="todolist-wrapper">
             <div className="todolist">
                 <div className="todolist__delete delete-button ">
-                    <Button title='' disabled={disabledTodo} callback={() => { deleteTodolist(todolist.id) }} />
+                    <IconButton
+                        size="large"
+                        disabled={disabledTodo}
+                        onClick={() => { deleteTodolist(todolist.id) }}>
+                        <HighlightOffOutlinedIcon color={disabledTodo ? 'action' : 'error'} />
+                    </IconButton>
                 </div>
                 <div className="todolist__title">
-                    <ConvertTitle disabled={disabledTodo} title={todolist.title} callback={(title) => changeTodolistTitle({ title, todolistID: todolist.id })} />
+                    <ChangeableTitle disabled={disabledTodo} title={todolist.title} callback={(title) => changeTodolistTitle({ title, todolistID: todolist.id })} />
                 </div>
-                <div className="todolist__addItem">
-                    <AddItem callback={createTask} disabled={disabledTodo} convertInput={true} />
-                </div>
+                <AddItem callback={createTask} disabled={disabledTodo} />
                 <ul className="todolist__tasks">
                     {
                         sortedTask(props.tasks, filterValue).map(task =>
-                            <li className="todolist__task task" key={task.id}>
-                                <Task
-                                    todolistRequestStatus={disabledTodo}
-                                    task={task}
-                                    deleteTask={deleteTask}
-                                    changeTaskStatus={changeTaskStatus}
-                                    changeTaskTitle={changeTaskTitle}
-                                    key={task.title}
-                                />
-                            </li>
+                            <Task
+                                todolistRequestStatus={disabledTodo}
+                                task={task}
+                                deleteTask={deleteTask}
+                                changeTaskStatus={changeTaskStatus}
+                                changeTaskTitle={changeTaskTitle}
+                                key={task.title}
+                            />
                         )
                     }
                 </ul>

@@ -34,4 +34,4 @@ type ActionsType =
     | SetStatusACType
     | SetErrorACType
 export type SetErrorACType = ReturnType<typeof setErrorAC>
-type SetStatusACType = ReturnType<typeof setStatusAC>
+export type SetStatusACType = ReturnType<typeof setStatusAC>

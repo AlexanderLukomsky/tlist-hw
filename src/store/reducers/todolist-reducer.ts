@@ -1,4 +1,4 @@
-import { setErrorAC } from './app-reducer';
+import { setErrorAC, setStatusAC, SetStatusACType } from './app-reducer';
 
 import { Dispatch } from "redux";
 import { todolist_api } from "../../api/todolist-api";
@@ -46,10 +46,12 @@ export const changeTodolistRequestStatusAC = (payload: { todolistID: string, sta
     } as const
 )
 //thunks
-export const fetchTodolistsTC = () => (dispatch: Dispatch<SetTodolistsACType>) => {
+export const fetchTodolistsTC = () => (dispatch: Dispatch<SetTodolistsACType | SetStatusACType>) => {
+    dispatch(setStatusAC('loading'))
     todolist_api.getTodolist()
         .then((res) => {
             dispatch(setTodolistsAC(res.data))
+            dispatch(setStatusAC('idle'))
         })
 }
 export const changeTodolistTitleTC = (payload: { todolistID: string, title: string }) => (dispatch: Dispatch<ChangeTodolistTitleACType | ChangeTodolistRequestStatusACType>) => {

@@ -1,0 +1,25 @@
+.switcher {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    overflow: hidden;
+    button {
+        font-weight: 700;
+        font-size: 14px;
+    }
+
+    & .active {
+        button {
+            color: greenyellow;
+            border-color: greenyellow;
+            max-width: fit-content;
+
+            &.completed {
+                background-color: greenyellow;
+                color: red;
+                border-color: red;
+            }
+        }
+    }
+}

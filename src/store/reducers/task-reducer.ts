@@ -1,4 +1,4 @@
-import { setErrorAC, SetErrorACType } from './app-reducer';
+import { setErrorAC, SetErrorACType, setStatusAC, SetStatusACType } from './app-reducer';
 import { AppRootStoreType } from './../store';
 import { DeleteTodolistACType, SetTodolistsACType, CreateTodolistACType, ChangeTodolistRequestStatusACType, changeTodolistRequestStatusAC } from './todolist-reducer';
 import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType, UpdateTaskType } from './../../types/TaskType';
@@ -61,10 +61,12 @@ export const updateTaskAC = (payload: { todolistID: string, taskID: string, task
     } as const
 )
 //thunks
-export const fetchTasksTC = (todolistID: string) => (dispatch: Dispatch<SetTasksACType>) => {
+export const fetchTasksTC = (todolistID: string) => (dispatch: Dispatch<SetTasksACType | SetStatusACType>) => {
+    dispatch(setStatusAC('loading'))
     task_api.getTask(todolistID)
         .then(res => {
             dispatch(setTasksAC({ todolistID, tasks: res.data.items }))
+            dispatch(setStatusAC('idle'))
         })
 }
 export const createTaskTC = (payload: { todolistID: string, title: string }) => (dispatch: Dispatch<CreateTaskACType | SetErrorACType | ChangeTodolistRequestStatusACType>) => {

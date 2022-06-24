@@ -1,7 +1,11 @@
+import './task.scss'
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
+import { Checkbox, IconButton } from "@mui/material"
 import React, { ChangeEvent, useState } from "react"
-import { Button } from "../../../../components/Button/Buttons"
-import { Checkbox } from "../../../../components/Checkbox"
-import { ConvertTitle } from "../../../../components/ConvertTitle/ConvertTitle"
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+
+import { ChangeableTitle } from "../../../../components/ChangeableTitle/ChangeableTitle"
 import { TaskStatus, TaskType } from "../../../../types/TaskType"
 
 type TaskPropsType = {
@@ -20,18 +24,24 @@ export const Task: React.FC<TaskPropsType> = ({ task, ...props }) => {
         }
     }
     return (
-        <>
+        <li className='task'>
             <Checkbox
                 checked={convertToBooleanStatus(task.status)}
-                onChange={(status: boolean) => { props.changeTaskStatus({ todolistID: task.todoListId, taskID: task.id, status }) }}
+                onChange={(status) => { props.changeTaskStatus({ todolistID: task.todoListId, taskID: task.id, status: status.currentTarget.checked }) }}
+                icon={<RadioButtonUncheckedOutlinedIcon color='primary' />}
+                checkedIcon={<CheckCircleOutlineOutlinedIcon color='success' />}
             />
-            <ConvertTitle title={task.title} callback={(title) => { props.changeTaskTitle({ todolistID: task.todoListId, taskID: task.id, taskModel: { title } }) }} />
-            <span className="task__delete delete-button">
-                <Button title={''}
-                    callback={() => { props.deleteTask({ todolistID: task.todoListId, taskID: task.id }) }}
+            <div className='task__title'>
+                <ChangeableTitle
+                    title={task.title}
+                    callback={(title) => { props.changeTaskTitle({ todolistID: task.todoListId, taskID: task.id, taskModel: { title } }) }}
                 />
-            </span>
-
-        </>
+            </div>
+            <IconButton onClick={() => { props.deleteTask({ todolistID: task.todoListId, taskID: task.id }) }}
+                className='task__delete'
+            >
+                <DeleteOutlineOutlinedIcon fontSize='medium' color='secondary' />
+            </IconButton>
+        </li>
     )
 }

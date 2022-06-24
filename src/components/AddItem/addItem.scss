@@ -1,0 +1,15 @@
+.addItem {
+    display: flex;
+    align-items: center;
+    .addItem-value {
+        input {
+            color: #fff;
+        }
+        label {
+            color: red;
+        }
+    }
+    &__add-icon {
+        color: yellowgreen;
+    }
+}
