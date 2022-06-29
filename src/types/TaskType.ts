@@ -1,3 +1,5 @@
+import { ResultCodeType } from "../api/instance"
+
 export type TasksStateType = {
     [key: string]: TaskType[]
 }
@@ -22,10 +24,7 @@ export enum TaskPriority {
     Middle = 1,
     Hight = 2
 }
-export enum ResultCodeType {
-    Ok = 0,
-    Failed = 1
-}
+
 export type CreateTaskResponseType<D> = {
     resultCode: ResultCodeType
     messages: string,

@@ -6,3 +6,13 @@ export const _instance = axios.create({
         "API-KEY": "1b228bfc-8734-47cb-b840-f8cc669c3e6c"
     }
 })
+
+export type ResponseType<D> = {
+    data: D
+    resultCode: ResultCodeType;
+    messages: string[];
+}
+export enum ResultCodeType {
+    Ok = 0,
+    Failed = 1
+}

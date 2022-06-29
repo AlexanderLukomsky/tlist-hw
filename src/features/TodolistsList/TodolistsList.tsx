@@ -5,12 +5,11 @@ import { createTodolistTC, fetchTodolistsTC } from "../../store/reducers/todolis
 import { returnTasks, returnTodolists } from "../../store/selector/selector"
 import { Todolist } from "./Todolist/Todolist"
 
-export const TodolistsList: React.FC = () => {
-
+export const TodolistsList: React.FC = React.memo(() => {
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(fetchTodolistsTC())
-    }, [dispatch])
+    }, [])
     const tasks = useSelector(returnTasks)
     const todolists = useSelector(returnTodolists)
     return (
@@ -26,4 +25,4 @@ export const TodolistsList: React.FC = () => {
 
         </div>
     )
-}
+})

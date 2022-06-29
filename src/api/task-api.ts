@@ -1,16 +1,18 @@
-import { CreateTaskResponseType, TaskType, UpdateTaskType } from "../types/TaskType"
-import { _instance } from "./instance"
+import axios from "axios"
+import { TaskType, UpdateTaskType } from "../types/TaskType"
+import { ResponseType, _instance } from "./instance"
 export const task_api = {
-    getTask(todolistID: string) {
+    getTask: (todolistID: string) => {
+        console.log(todolistID);
         return _instance.get<{ items: TaskType[] }>(`todo-lists/${todolistID}/tasks`)
     },
-    createTask(payload: { todolistID: string, title: string }) {
-        return _instance.post<CreateTaskResponseType<{ item: TaskType }>>(`todo-lists/${payload.todolistID}/tasks`, { title: payload.title })
+    createTask: (payload: { todolistID: string, title: string }) => {
+        return _instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${payload.todolistID}/tasks`, { title: payload.title })
     },
-    deleteTask(payload: { todolistID: string, taskID: string }) {
+    deleteTask: (payload: { todolistID: string, taskID: string }) => {
         return _instance.delete(`todo-lists/${payload.todolistID}/tasks/${payload.taskID}`)
     },
-    updateTask(payload: { todolistID: string, taskID: string, task: UpdateTaskType }) {
+    updateTask: (payload: { todolistID: string, taskID: string, task: UpdateTaskType }) => {
         return _instance.put(`todo-lists/${payload.todolistID}/tasks/${payload.taskID}`, payload.task)
     }
 

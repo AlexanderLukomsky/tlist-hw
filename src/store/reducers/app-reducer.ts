@@ -1,37 +1,63 @@
+import { Dispatch } from "redux"
+import { authAPI } from "../../api/auth-api"
+import { ResultCodeType } from "../../api/instance"
+import { setIsLoggedInAC } from "./auth-reducer"
+
 //initial state
 const initialState: InitialStateType = {
     status: 'idle',
-    error: null
+    errorMessage: null,
+    isInitializedApp: false
 }
 //reducer
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
     switch (action.type) {
-        case 'APP/SET-STATUS': return { ...state, status: action.status }
-        case 'APP/SET-ERROR': return { ...state, error: action.error }
-        default: return state
+        case 'app/SET-STATUS': return { ...state, status: action.status }
+        case 'app/SET-ERROR': return { ...state, errorMessage: action.errorMessage }
+        case 'app/SET-INITIALIZED-APP': return { ...state, isInitializedApp: action.isInitializedApp }
+        default: return { ...state }
     }
 }
 //actions
-export const setStatusAC = (status: RequestStatusType) => (
+export const setAppStatusAC = (status: RequestStatusType) => (
     {
-        type: 'APP/SET-STATUS',
+        type: 'app/SET-STATUS',
         status
     } as const
 )
-export const setErrorAC = (error: string | null) => (
+export const setAppErrorAC = (errorMessage: string | null) => (
     {
-        type: 'APP/SET-ERROR',
-        error
+        type: 'app/SET-ERROR',
+        errorMessage
     } as const
 )
+export const setInitializedAppAC = (isInitializedApp: boolean) => (
+    {
+        type: 'app/SET-INITIALIZED-APP',
+        isInitializedApp
+    } as const
+)
+//thunks
+export const setInitializedAppTC = () => (dispatch: Dispatch) => {
+    authAPI.authMe()
+        .then(res => {
+            if (res.data.resultCode === ResultCodeType.Ok) {
+                dispatch(setIsLoggedInAC(true))
+            }
+            dispatch(setInitializedAppAC(true))
+        })
+}
 //types
 export type InitialStateType = {
     status: RequestStatusType
-    error: string | null
+    errorMessage: string | null
+    isInitializedApp: boolean
 }
 type RequestStatusType = 'idle' | 'loading' | 'successed' | 'failed'
 type ActionsType =
-    | SetStatusACType
-    | SetErrorACType
-export type SetErrorACType = ReturnType<typeof setErrorAC>
-export type SetStatusACType = ReturnType<typeof setStatusAC>
+    | SetAppStatusACType
+    | SetAppErrorACType
+    | SetInitializedAppACType
+export type SetAppErrorACType = ReturnType<typeof setAppErrorAC>
+export type SetAppStatusACType = ReturnType<typeof setAppStatusAC>
+export type SetInitializedAppACType = ReturnType<typeof setInitializedAppAC>

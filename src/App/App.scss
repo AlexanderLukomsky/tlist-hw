@@ -1,13 +1,20 @@
 .App {
   background-color: #343333;
   color: white;
-  min-height: 100vh;
-  position: relative;
-  &__progressbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+  min-height: 90vh;
+
+  .header {
+    position: relative;
+    &__container {
+      width: 100%;
+      text-align: right;
+    }
+    .progressbar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
   }
 }
 
