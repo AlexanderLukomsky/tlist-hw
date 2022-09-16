@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/tlist-hw/static/css/main.fab040d5.css",
+    "main.js": "/tlist-hw/static/js/main.39ae497c.js",
+    "index.html": "/tlist-hw/index.html",
+    "main.fab040d5.css.map": "/tlist-hw/static/css/main.fab040d5.css.map",
+    "main.39ae497c.js.map": "/tlist-hw/static/js/main.39ae497c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fab040d5.css",
+    "static/js/main.39ae497c.js"
+  ]
+}
