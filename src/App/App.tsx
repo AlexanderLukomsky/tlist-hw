@@ -1,6 +1,5 @@
 import { AppBar, Button, CircularProgress, LinearProgress, Toolbar } from "@mui/material";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 import { Login } from "../features/Login/Login";
@@ -27,8 +26,6 @@ export const App: React.FC = () => {
             <CircularProgress color="secondary" style={{ width: '70px', height: '70px' }} />
         </div>
     }
-
-
     return (
         <div className='App'>
             <AppBar position="static" className="header" color="transparent">
