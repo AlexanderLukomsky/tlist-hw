@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleServerNetworkError } from './../utils/utils';
-import { Dispatch } from "redux"
 import { authAPI } from "../../api/auth-api"
 import { ResultCodeType } from "../../api/instance"
 import { setIsLoggedInAC } from "./auth-reducer"
@@ -42,8 +41,7 @@ export const setInitializedAppTC = (): AppThunk => (dispatch) => {
                 dispatch(setIsLoggedInAC({ value: true }))
             }
             dispatch(setInitializedAppAC({ isInitializedApp: true }))
-        }).
-        catch(error => {
+        }).catch(error => {
             handleServerNetworkError(error.message, dispatch)
         })
 }

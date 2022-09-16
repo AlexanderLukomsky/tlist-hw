@@ -1,6 +1,6 @@
 import { AppBar, Button, CircularProgress, LinearProgress, Toolbar } from "@mui/material";
 import { useEffect } from "react";
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 import { Login } from "../features/Login/Login";
 import { TodolistsList } from "../features/TodolistsList/TodolistsList";
@@ -12,14 +12,13 @@ export const App: React.FC = () => {
     const status = useAppSelector(state => state.app.status)
     const isInitializedApp = useAppSelector(state => state.app.isInitializedApp)
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const logOut = () => {
         dispatch(logoutTC())
     }
     useEffect(() => {
         dispatch(setInitializedAppTC())
-    }, [])
+    }, [dispatch])
 
     if (!isInitializedApp) {
         return <div style={{ position: 'absolute', top: '50%', left: '50%', right: '50%' }}>

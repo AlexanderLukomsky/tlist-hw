@@ -2,7 +2,7 @@ import './task.scss'
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import { Checkbox, IconButton } from "@mui/material"
-import React, { ChangeEvent, useState } from "react"
+import React from "react"
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 import { ChangeableTitle } from "../../../../components/ChangeableTitle/ChangeableTitle"

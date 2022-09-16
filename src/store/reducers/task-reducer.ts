@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { setAppErrorAC, SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from './app-reducer';
+import { setAppStatusAC } from './app-reducer';
 import { AppRootStoreType, AppThunk } from './../store';
-import { DeleteTodolistACType, SetTodolistsACType, CreateTodolistACType, ChangeTodolistRequestStatusACType, changeTodolistRequestStatusAC, setTodolistsAC, deleteTodolistAC, createTodolistAC } from './todolist-reducer';
+import { DeleteTodolistACType, SetTodolistsACType, CreateTodolistACType, setTodolistsAC, deleteTodolistAC, createTodolistAC } from './todolist-reducer';
 import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType, UpdateTaskType } from './../../types/TaskType';
-import { Dispatch } from 'redux';
 import { task_api } from '../../api/task-api';
 import { handleServerAppError, handleServerNetworkError } from '../utils/utils';
 import { ResultCodeType } from '../../api/instance';

@@ -1,9 +1,7 @@
 import { TodolistResponseType } from './../../types/TodolistType';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { handleServerAppError, handleServerNetworkError } from './../utils/utils';
-import { setAppErrorAC, SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from './app-reducer';
-
-import { Dispatch } from "redux";
+import { setAppStatusAC } from './app-reducer';
 import { todolist_api } from "../../api/todolist-api";
 import { TodolistRequestStatus, TodolistType } from "../../types/TodolistType";
 import { ResultCodeType } from '../../api/instance';

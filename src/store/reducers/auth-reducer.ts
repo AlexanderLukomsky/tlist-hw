@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppThunk } from './../store';
-import { setAppStatusAC, SetAppErrorACType, SetAppStatusACType } from './app-reducer';
+import { setAppStatusAC } from './app-reducer';
 import { authAPI } from '../../api/auth-api';
-import { Dispatch } from "redux"
 import { authDataType } from "../../api/auth-api"
 import { ResultCodeType } from '../../api/instance';
 import { handleServerAppError, handleServerNetworkError } from '../utils/utils';
