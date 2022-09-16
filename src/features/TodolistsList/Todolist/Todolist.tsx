@@ -1,7 +1,6 @@
 import { Delete } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
 import React, { MouseEvent, useEffect, useState } from "react"
-import { useDispatch } from "react-redux"
 import { AddItem } from "../../../components/AddItem/AddItem"
 import { ChangeableTitle } from "../../../components/ChangeableTitle/ChangeableTitle"
 import { Switcher } from "../../../components/Switcher/Switcher"
@@ -11,13 +10,14 @@ import { TaskStatus, TaskType } from "../../../types/TaskType"
 import { TodolistType } from "../../../types/TodolistType"
 import { Task } from "./Task/Task"
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
+import { useAppDispatch } from "../../../store/store"
 type FilterValueType = 'all' | 'active' | 'completed'
 type TodolistPropsType = {
     todolist: TodolistType
     tasks: TaskType[]
 }
 export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...props }: TodolistPropsType) => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     useEffect(() => {
         dispatch(fetchTasksTC(todolist.id))
     }, [])

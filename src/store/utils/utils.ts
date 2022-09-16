@@ -6,17 +6,17 @@ import { setAppErrorAC, SetAppErrorACType, setAppStatusAC, SetAppStatusACType } 
 
 export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch<SetAppErrorACType | SetAppStatusACType>) => {
     if (data.messages.length) {
-        dispatch(setAppErrorAC(data.messages[0]))
+        dispatch(setAppErrorAC({ errorMessage: data.messages[0] }))
     } else {
-        dispatch(setAppErrorAC('some error'))
+        dispatch(setAppErrorAC({ errorMessage: 'some error' }))
     }
-    dispatch(setAppStatusAC('failed'))
+    dispatch(setAppStatusAC({ status: 'failed' }))
 }
 export const handleServerNetworkError = (message: string, dispatch: Dispatch<SetAppErrorACType | SetAppStatusACType>) => {
     if (message) {
-        dispatch(setAppErrorAC(message))
+        dispatch(setAppErrorAC({ errorMessage: message }))
     } else {
-        dispatch(setAppErrorAC('some error'))
+        dispatch(setAppErrorAC({ errorMessage: 'some error' }))
     }
-    dispatch(setAppStatusAC('failed'))
+    dispatch(setAppStatusAC({ status: 'failed' }))
 }

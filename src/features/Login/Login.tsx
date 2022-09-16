@@ -2,33 +2,41 @@ import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, 
 import { Field, useFormik } from "formik";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Route, useNavigate } from "react-router-dom";
+import { Navigate, Route, useNavigate } from "react-router-dom";
 import { authTC } from "../../store/reducers/auth-reducer";
-import { useAppSelector } from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import './login.scss'
 export const Login = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    const navigate = useNavigate()
-    useEffect(() => {
-        if (isLoggedIn) { navigate('/todolists') }
-    })
+    // const navigate = useNavigate()
+    // useEffect(() => {
+    //     if (isLoggedIn) { navigate('/todolists') }
+    // }, [isLoggedIn])
+    type FormikErrorsType = {
+        text?: string
+        password?: string
+        rememberMe?: string
+    }
     const formik = useFormik({
-        validate: (values) => {
-            if (!values.text) {
-                return {
-                    text: 'Required'
-                }
-            }
-            if (!values.password) {
-                console.log('pass');
-                return { password: 'Required' }
-            }
-        },
         initialValues: {
-            text: '',
+            text: 'lukomsky.alexander@gmail.com',
             password: '3448313',
             rememberMe: false
+        },
+        validate: (values) => {
+            const errors: FormikErrorsType = {};
+            if (!values.text) {
+                errors.text = 'Required';
+            } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.text)) {
+                errors.text = 'Invalid email address';
+            }
+            if (!values.password) {
+                errors.password = 'Required'
+            } else if (values.password.length < 3) {
+                errors.password = 'Password cannot be less than 3 characters'
+            }
+            return errors;
         },
         onSubmit: values => {
             const data = {
@@ -36,9 +44,16 @@ export const Login = () => {
                 password: values.password,
                 rememberMe: values.rememberMe
             }
+            formik.validateForm({
+                text: values.text,
+                password: values.password,
+                rememberMe: values.rememberMe
+            })
             dispatch(authTC(data))
+            formik.resetForm()
         },
     });
+    if (isLoggedIn) { return <Navigate to='/todolists' /> }
     return (
         <Grid container justifyContent='center' className="login">
             <Grid item xs={4}>
@@ -50,24 +65,24 @@ export const Login = () => {
                                 label='Email *'
                                 margin="normal"
                                 color="success"
-                                {...formik.getFieldProps("text")}
+                                {...formik.getFieldProps('text')}
+
                             />
-                            {formik.errors.text ? <span>{formik.errors.text}</span> : null}
+                            {formik.touched.text && formik.errors.text && <span >{formik.errors.text}</span>}
                             <TextField
                                 type={"password"}
                                 label='Password *'
                                 margin="normal"
                                 color="success"
-                                {...formik.getFieldProps("password")}
+                                {...formik.getFieldProps('password')}
                             />
-                            {formik.touched.password && formik.errors.password ? <span>{formik.errors.password}</span> : null}
+                            {formik.touched.password && formik.errors.password && <span>{formik.errors.password}</span>}
                             <FormControlLabel
-                                name="rememberMe"
                                 label={'Remember me'}
                                 control={<Checkbox
                                     color="error"
-                                    {...formik.getFieldProps("rememberMe")}
                                     checked={formik.values.rememberMe}
+                                    {...formik.getFieldProps('rememberMe')}
                                 />}
                             />
                             <Button style={{ minWidth: '180px', width: 'fit-content', margin: '0 auto' }}
