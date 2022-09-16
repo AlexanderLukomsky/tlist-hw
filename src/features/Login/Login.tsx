@@ -5,9 +5,10 @@ import { useDispatch } from "react-redux";
 import { Navigate, Route, useNavigate } from "react-router-dom";
 import { authTC } from "../../store/reducers/auth-reducer";
 import { useAppDispatch, useAppSelector } from "../../store/store";
-const DEFAULT_PASSWORD = 'JUST PRESS LOGIN BUTTON :)'
+
 import './login.scss'
 export const Login = () => {
+    const DEFAULT_PASSWORD = 'JUST PRESS LOGIN BUTTON :)'
     const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
     // const navigate = useNavigate()
