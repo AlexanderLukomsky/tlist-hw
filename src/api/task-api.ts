@@ -1,4 +1,3 @@
-import axios from "axios"
 import { TaskType, UpdateTaskType } from "../types/TaskType"
 import { ResponseType, _instance } from "./instance"
 export const task_api = {
