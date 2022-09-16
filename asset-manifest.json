@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/tlist-hw/static/css/main.fab040d5.css",
-    "main.js": "/tlist-hw/static/js/main.f349f366.js",
+    "main.js": "/tlist-hw/static/js/main.1383d75d.js",
     "index.html": "/tlist-hw/index.html",
     "main.fab040d5.css.map": "/tlist-hw/static/css/main.fab040d5.css.map",
-    "main.f349f366.js.map": "/tlist-hw/static/js/main.f349f366.js.map"
+    "main.1383d75d.js.map": "/tlist-hw/static/js/main.1383d75d.js.map"
   },
   "entrypoints": [
     "static/css/main.fab040d5.css",
-    "static/js/main.f349f366.js"
+    "static/js/main.1383d75d.js"
   ]
 }
