@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { Navigate, Route, useNavigate } from "react-router-dom";
 import { authTC } from "../../store/reducers/auth-reducer";
 import { useAppDispatch, useAppSelector } from "../../store/store";
+const DEFAULT_PASSWORD = 'JUST PRESS LOGIN BUTTON :)'
 import './login.scss'
 export const Login = () => {
     const dispatch = useAppDispatch()
@@ -21,7 +22,7 @@ export const Login = () => {
     const formik = useFormik({
         initialValues: {
             text: 'lukomsky.alexander@gmail.com',
-            password: '3448313',
+            password: DEFAULT_PASSWORD,
             rememberMe: false
         },
         validate: (values) => {
@@ -41,7 +42,7 @@ export const Login = () => {
         onSubmit: values => {
             const data = {
                 email: values.text,
-                password: values.password,
+                password: values.password === DEFAULT_PASSWORD ? process.env.REACT_APP_LOGIN_PASSWORD as string : values.password,
                 rememberMe: values.rememberMe
             }
             formik.validateForm({
