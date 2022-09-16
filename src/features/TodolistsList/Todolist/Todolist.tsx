@@ -1,6 +1,5 @@
-import { Delete } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
-import React, { MouseEvent, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { AddItem } from "../../../components/AddItem/AddItem"
 import { ChangeableTitle } from "../../../components/ChangeableTitle/ChangeableTitle"
 import { Switcher } from "../../../components/Switcher/Switcher"
@@ -20,7 +19,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...
     const dispatch = useAppDispatch()
     useEffect(() => {
         dispatch(fetchTasksTC(todolist.id))
-    }, [])
+    }, [dispatch, todolist.id])
     const [filterValue, setFilterValue] = useState<FilterValueType>('all')
     //dispatch todolist TC
     const changeTodolistTitle = (payload: { title: string, todolistID: string }) => {

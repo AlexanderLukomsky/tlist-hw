@@ -1,8 +1,6 @@
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from "@mui/material"
-import { Field, useFormik } from "formik";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Navigate, Route, useNavigate } from "react-router-dom";
+import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, TextField } from "@mui/material"
+import { useFormik } from "formik";
+import { Navigate } from "react-router-dom";
 import { authTC } from "../../store/reducers/auth-reducer";
 import { useAppDispatch, useAppSelector } from "../../store/store";
 
@@ -11,10 +9,6 @@ export const Login = () => {
     const DEFAULT_PASSWORD = 'JUST PRESS LOGIN BUTTON :)'
     const dispatch = useAppDispatch()
     const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
-    // const navigate = useNavigate()
-    // useEffect(() => {
-    //     if (isLoggedIn) { navigate('/todolists') }
-    // }, [isLoggedIn])
     type FormikErrorsType = {
         text?: string
         password?: string

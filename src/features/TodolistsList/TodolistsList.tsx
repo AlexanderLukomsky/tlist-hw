@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Navigate } from "react-router-dom";
 import { AddItem } from "../../components/AddItem/AddItem";
 import { createTodolistTC, fetchTodolistsTC } from "../../store/reducers/todolist-reducer"
@@ -16,7 +16,7 @@ export const TodolistsList: React.FC = React.memo(() => {
         if (isLoggedIn) {
             dispatch(fetchTodolistsTC())
         }
-    }, [])
+    }, [isLoggedIn, dispatch])
     if (!isLoggedIn) return <Navigate to='/login' />
 
     return (
