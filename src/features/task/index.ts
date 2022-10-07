@@ -1,4 +1,5 @@
-import * as tasksActions from './task-actions'
+import { asyncActions as tasksActions } from './task-reducer'
+
 export {
    tasksActions
 }

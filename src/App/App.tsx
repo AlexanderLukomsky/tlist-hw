@@ -2,19 +2,20 @@ import { AppBar, Button, CircularProgress, LinearProgress, Toolbar } from "@mui/
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { appActions } from ".";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 import { authSelectors } from "../features/auth";
 import { logoutTC } from "../features/auth/auth-reducer";
 import { Login } from "../features/auth/Login";
-import { useAppDispatch } from "../store/store";
+import { useActions, useAppDispatch } from "../store/store";
 import { Todolists } from './../features/todolists/Todolists';
-import { setInitializedAppTC } from "./app-actions";
 import { selectAppStatus, selectIsInitializedApp } from "./selectors";
 
 export const App: React.FC = () => {
     const status = useSelector(selectAppStatus)
     const isInitializedApp = useSelector(selectIsInitializedApp)
     const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
+    const { setInitializedAppTC } = useActions(appActions)
     const dispatch = useAppDispatch()
     const logOut = () => {
         dispatch(logoutTC())
