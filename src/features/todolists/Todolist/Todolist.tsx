@@ -5,44 +5,45 @@ import { AddItem } from "../../../components/AddItem/AddItem"
 import { ChangeableTitle } from "../../../components/ChangeableTitle/ChangeableTitle"
 import { Switcher } from "../../../components/Switcher/Switcher"
 import { changeFilter, FilterType } from "../../../common/reducers/filter-reducer"
-import { createTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC } from "../../task/task-reducer"
-import { useAppDispatch, useAppSelector } from "../../../store/store"
+import { useActions, useAppDispatch, useAppSelector } from "../../../store/store"
 import { TaskStatus } from "../../../types/TaskType"
 import { TodolistType } from "../../../types/TodolistType"
-import { changeTodolistTitleTC, deleteTodolistTC } from "../todolist-reducer"
 import { selectFilteredTasks } from '../selector'
 import { Task } from "../../task/Task"
+import { tasksActions } from '../../task'
+import { todolistActions } from '..'
 type TodolistPropsType = {
     todolist: TodolistType,
     todolistID: string
 }
 export const Todolist: FC<TodolistPropsType> = React.memo(({ todolist, todolistID }: TodolistPropsType) => {
-
+    const { fetchTasksTC, createTaskTC, deleteTaskTC, updateTaskTC } = useActions(tasksActions)
+    const { changeTodolistTitleTC, deleteTodolistTC } = useActions(todolistActions)
     const dispatch = useAppDispatch()
     const tasks = useAppSelector(state => selectFilteredTasks(state, todolistID))
     useEffect(() => {
-        dispatch(fetchTasksTC(todolist.id))
-    }, [dispatch, todolist.id])
+        fetchTasksTC(todolist.id)
+    }, [todolist.id, fetchTasksTC])
     //dispatch todolist TC
     const changeTodolistTitle = (payload: { title: string, todolistID: string }) => {
-        dispatch(changeTodolistTitleTC(payload))
+        changeTodolistTitleTC(payload)
     }
     const deleteTodolist = (todolistID: string) => {
-        dispatch(deleteTodolistTC(todolistID))
+        deleteTodolistTC(todolistID)
     }
     //dispatch task TC
     const createTask = (title: string) => {
-        dispatch(createTaskTC({ todolistID: todolist.id, title }))
+        createTaskTC({ todolistID: todolist.id, title })
     }
     const deleteTask = (payload: { todolistID: string, taskID: string }) => {
-        dispatch(deleteTaskTC(payload))
+        deleteTaskTC(payload)
     }
     const changeTaskStatus = (payload: { todolistID: string, taskID: string, status: boolean }) => {
         const convertStatusToTaskStatusType = payload.status ? TaskStatus.Completed : TaskStatus.NotCompleted
-        dispatch(updateTaskTC({ todolistID: payload.todolistID, taskID: payload.taskID, taskModel: { status: convertStatusToTaskStatusType } }))
+        updateTaskTC({ todolistID: payload.todolistID, taskID: payload.taskID, taskModel: { status: convertStatusToTaskStatusType } })
     }
     const changeTaskTitle = (payload: { todolistID: string, taskID: string, taskModel: { title: string } }) => {
-        dispatch(updateTaskTC(payload))
+        updateTaskTC(payload)
     }
     //filter
     const onChangeFilter = (filterValue: FilterType) => {
