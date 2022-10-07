@@ -3,26 +3,26 @@ import { todolist_api } from "../../api/todolist-api";
 import { setAppStatusAC } from '../../app/app-reducer';
 import { AppThunk } from '../../store/store';
 import { handleServerAppError, handleServerNetworkError } from '../../store/utils/utils';
-import { changeTodolistRequestStatusAC, changeTodolistTitleAC, createTodolistAC, deleteTodolistAC, setTodolistsAC } from './todolist-reducer';
+import { changeTodolistRequestStatusAC, setNewTodolistTitle, createTodolistAC, deleteTodolistAC, setTodolists } from './todolist-reducer';
 //thunks
-export const fetchTodolistsTC = (): AppThunk => async (dispatch) => {
+export const fetchTodolists = (): AppThunk => async (dispatch) => {
    dispatch(setAppStatusAC({ status: 'loading' }))
    try {
       const res = await todolist_api.getTodolist()
-      dispatch(setTodolistsAC({ todolists: res.data }))
+      dispatch(setTodolists({ todolists: res.data }))
       dispatch(setAppStatusAC({ status: 'successed' }))
    } catch (err) {
       handleServerNetworkError((err as Error).message, dispatch)
    }
 }
 
-export const changeTodolistTitleTC = (payload: { todolistID: string, title: string }): AppThunk => async (dispatch) => {
+export const changeTodolistTitle = (payload: { todolistID: string, title: string }): AppThunk => async (dispatch) => {
    dispatch(setAppStatusAC({ status: 'loading' }))
    dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'loading' }))
    try {
       const res = await todolist_api.changeTitle(payload)
       if (res.data.resultCode === ResultCodeType.Ok) {
-         dispatch(changeTodolistTitleAC(payload))
+         dispatch(setNewTodolistTitle(payload))
          dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'successful' }))
          dispatch(setAppStatusAC({ status: 'successed' }))
       } else {
@@ -35,7 +35,7 @@ export const changeTodolistTitleTC = (payload: { todolistID: string, title: stri
    }
 }
 
-export const deleteTodolistTC = (todolistID: string): AppThunk =>
+export const deleteTodolist = (todolistID: string): AppThunk =>
    async (dispatch) => {
       dispatch(changeTodolistRequestStatusAC({ todolistID, status: 'loading' }))
       try {
@@ -46,7 +46,7 @@ export const deleteTodolistTC = (todolistID: string): AppThunk =>
       }
    }
 
-export const createTodolistTC = (title: string): AppThunk =>
+export const createTodolist = (title: string): AppThunk =>
    async (dispatch) => {
       try {
          const res = await todolist_api.createTodolist(title)

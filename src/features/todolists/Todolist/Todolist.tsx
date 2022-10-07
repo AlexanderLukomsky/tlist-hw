@@ -17,33 +17,20 @@ type TodolistPropsType = {
     todolistID: string
 }
 export const Todolist: FC<TodolistPropsType> = React.memo(({ todolist, todolistID }: TodolistPropsType) => {
-    const { fetchTasksTC, createTaskTC, deleteTaskTC, updateTaskTC } = useActions(tasksActions)
-    const { changeTodolistTitleTC, deleteTodolistTC } = useActions(todolistActions)
+    const { fetchTasks, createTask, deleteTask, updateTask } = useActions(tasksActions)
+    const { changeTodolistTitle, deleteTodolist } = useActions(todolistActions)
     const dispatch = useAppDispatch()
     const tasks = useAppSelector(state => selectFilteredTasks(state, todolistID))
     useEffect(() => {
-        fetchTasksTC(todolist.id)
-    }, [todolist.id, fetchTasksTC])
-    //dispatch todolist TC
-    const changeTodolistTitle = (payload: { title: string, todolistID: string }) => {
-        changeTodolistTitleTC(payload)
-    }
-    const deleteTodolist = (todolistID: string) => {
-        deleteTodolistTC(todolistID)
-    }
+        fetchTasks(todolist.id)
+    }, [todolist.id, fetchTasks])
     //dispatch task TC
-    const createTask = (title: string) => {
-        createTaskTC({ todolistID: todolist.id, title })
-    }
-    const deleteTask = (payload: { todolistID: string, taskID: string }) => {
-        deleteTaskTC(payload)
-    }
     const changeTaskStatus = (payload: { todolistID: string, taskID: string, status: boolean }) => {
         const convertStatusToTaskStatusType = payload.status ? TaskStatus.Completed : TaskStatus.NotCompleted
-        updateTaskTC({ todolistID: payload.todolistID, taskID: payload.taskID, taskModel: { status: convertStatusToTaskStatusType } })
+        updateTask({ todolistID: payload.todolistID, taskID: payload.taskID, taskModel: { status: convertStatusToTaskStatusType } })
     }
     const changeTaskTitle = (payload: { todolistID: string, taskID: string, taskModel: { title: string } }) => {
-        updateTaskTC(payload)
+        updateTask(payload)
     }
     //filter
     const onChangeFilter = (filterValue: FilterType) => {
@@ -64,7 +51,7 @@ export const Todolist: FC<TodolistPropsType> = React.memo(({ todolist, todolistI
                 <div className="todolist__title">
                     <ChangeableTitle disabled={disabledTodo} title={todolist.title} callback={(title) => changeTodolistTitle({ title, todolistID: todolist.id })} />
                 </div>
-                <AddItem callback={createTask} disabled={disabledTodo} />
+                <AddItem callback={(title: string) => { createTask({ todolistID: todolist.id, title }) }} disabled={disabledTodo} />
                 <ul className="todolist__tasks">
                     {
                         tasks.map(task =>

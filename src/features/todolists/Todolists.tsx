@@ -9,20 +9,20 @@ import { selectTodolists } from "./selector";
 import { Todolist } from "./Todolist/Todolist";
 
 export const Todolists: React.FC = React.memo(() => {
-    const { fetchTodolistsTC, createTodolistTC } = useActions(todolistActions)
+    const { fetchTodolists, createTodolist } = useActions(todolistActions)
     const isLoggedIn = useSelector(selectIsLoggedIn)
     const todolists = useSelector(selectTodolists)
     useEffect(() => {
         if (isLoggedIn) {
-            fetchTodolistsTC()
+            fetchTodolists()
         }
-    }, [isLoggedIn, fetchTodolistsTC])
+    }, [isLoggedIn, createTodolist, fetchTodolists])
     if (!isLoggedIn) return <Navigate to='/login' />
 
     return (
         <div>
             <div className="add-todolist">
-                <AddItem disabled={false} callback={(title) => { createTodolistTC(title) }} />
+                <AddItem disabled={false} callback={(title) => { createTodolist(title) }} />
             </div>
             <div className="todolists-list">
                 {todolists.map(t =>

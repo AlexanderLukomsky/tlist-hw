@@ -1,15 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TodolistRequestStatus, TodolistResponseType, TodolistType } from '../../types/TodolistType';
-const initialState: TodolistType[] = []
 //reducer
 const slice = createSlice({
     name: 'todolists',
-    initialState: initialState,
+    initialState: [] as TodolistType[],
     reducers: {
-        setTodolistsAC: (state, action: PayloadAction<{ todolists: TodolistResponseType[] }>) => {
+        setTodolists: (state, action: PayloadAction<{ todolists: TodolistResponseType[] }>) => {
             return action.payload.todolists.map(t => ({ ...t, filter: 'all', requestStatus: 'idle' }))
         },
-        changeTodolistTitleAC: (state, action: PayloadAction<{ todolistID: string, title: string }>) => {
+        setNewTodolistTitle: (state, action: PayloadAction<{ todolistID: string, title: string }>) => {
             const index = state.findIndex(t => t.id === action.payload.todolistID)
             state[index].title = action.payload.title
         },
@@ -28,4 +27,5 @@ const slice = createSlice({
 })
 export const todolistReducer = slice.reducer
 //actions
-export const { setTodolistsAC, changeTodolistTitleAC, deleteTodolistAC, createTodolistAC, changeTodolistRequestStatusAC } = slice.actions
+export const { setTodolists, setNewTodolistTitle, deleteTodolistAC, createTodolistAC, changeTodolistRequestStatusAC } = slice.actions
+export const actions = slice.actions

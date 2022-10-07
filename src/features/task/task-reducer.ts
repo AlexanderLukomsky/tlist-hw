@@ -1,14 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType } from '../../types/TaskType';
 import { TodolistResponseType } from '../../types/TodolistType';
-import { deleteTodolistAC, setTodolistsAC } from '../todolists/todolist-reducer';
+import { deleteTodolistAC, setTodolists } from '../todolists/todolist-reducer';
 import { createTodolistAC } from './../todolists/todolist-reducer';
 
-const initialState: TasksStateType = {}
 //reducer
 const slice = createSlice({
     name: 'tasks',
-    initialState: initialState,
+    initialState: {} as TasksStateType,
     reducers: {
         setTasksAC: (state, action: PayloadAction<{ todolistID: string, tasks: TaskType[] }>) => {
             state[action.payload.todolistID] = action.payload.tasks
@@ -26,7 +25,7 @@ const slice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(setTodolistsAC, (state, action) => {
+        builder.addCase(setTodolists, (state, action) => {
             action.payload.todolists.forEach((t: TodolistResponseType) => state[t.id] = [])
         })
         builder.addCase(createTodolistAC, (state, action) => {

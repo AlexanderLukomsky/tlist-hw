@@ -7,13 +7,11 @@ import { authSelectors } from "../features/auth";
 import { logoutTC } from "../features/auth/auth-reducer";
 import { Login } from "../features/auth/Login";
 import { useAppDispatch } from "../store/store";
-import { setInitializedAppTC } from "./app-reducer";
-import { selectAppStatus, selectIsInitializedApp } from "./selectors";
 import { Todolists } from './../features/todolists/Todolists';
-
+import { setInitializedAppTC } from "./app-actions";
+import { selectAppStatus, selectIsInitializedApp } from "./selectors";
 
 export const App: React.FC = () => {
-
     const status = useSelector(selectAppStatus)
     const isInitializedApp = useSelector(selectIsInitializedApp)
     const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
