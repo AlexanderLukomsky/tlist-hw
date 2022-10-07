@@ -1,10 +1,10 @@
 import { Dispatch } from "redux"
 import { ResponseType } from "../../api/instance"
-import { setAppErrorAC, SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from "../../app/app-reducer"
+import { setAppErrorAC, setAppStatusAC } from "../../app/app-reducer"
 
 
 
-export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch<SetAppErrorACType | SetAppStatusACType>) => {
+export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch) => {
     if (data.messages.length) {
         dispatch(setAppErrorAC({ errorMessage: data.messages[0] }))
     } else {
@@ -12,7 +12,7 @@ export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatc
     }
     dispatch(setAppStatusAC({ status: 'failed' }))
 }
-export const handleServerNetworkError = (message: string, dispatch: Dispatch<SetAppErrorACType | SetAppStatusACType>) => {
+export const handleServerNetworkError = (message: string, dispatch: Dispatch) => {
     if (message) {
         dispatch(setAppErrorAC({ errorMessage: message }))
     } else {

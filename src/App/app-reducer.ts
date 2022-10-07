@@ -30,9 +30,7 @@ const slice = createSlice({
 })
 export const appReducer = slice.reducer
 //actions
-export const setAppStatusAC = slice.actions.setAppStatusAC
-export const setAppErrorAC = slice.actions.setAppErrorAC
-export const setInitializedAppAC = slice.actions.setInitializedAppAC
+export const { setAppStatusAC, setAppErrorAC, setInitializedAppAC } = slice.actions
 //thunks
 export const setInitializedAppTC = (): AppThunk => (dispatch) => {
     authAPI.authMe()
@@ -52,10 +50,3 @@ export type InitialStateType = {
     isInitializedApp: boolean
 }
 type RequestStatusType = 'idle' | 'loading' | 'successed' | 'failed'
-export type AppReducerActionType =
-    | SetAppStatusACType
-    | SetAppErrorACType
-    | SetInitializedAppACType
-export type SetAppErrorACType = ReturnType<typeof setAppErrorAC>
-export type SetAppStatusACType = ReturnType<typeof setAppStatusAC>
-export type SetInitializedAppACType = ReturnType<typeof setInitializedAppAC>

@@ -1,12 +1,11 @@
-import { ActionCreatorsMapObject, bindActionCreators, configureStore, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
-import { appReducer, AppReducerActionType } from "../app/app-reducer";
-import { taskReducer } from "../features/task/task-reducer";
-import { authReducer, AuthReducerActionType } from '../features/auth/auth-reducer';
-import { filterReducer, FilterReducerType } from '../common/reducers/filter-reducer';
-import { todolistReducer } from './../features/todolists/todolist-reducer';
+import { ActionCreatorsMapObject, AnyAction, bindActionCreators, configureStore, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
-
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { appReducer } from "../app/app-reducer";
+import { filterReducer } from '../common/reducers/filter-reducer';
+import { authReducer } from '../features/auth/auth-reducer';
+import { taskReducer } from "../features/task/task-reducer";
+import { todolistReducer } from './../features/todolists/todolist-reducer';
 
 export const store = configureStore({
     reducer: {
@@ -29,14 +28,9 @@ export const useActions = <T extends ActionCreatorsMapObject>(actions: T) => {
 }
 
 export type AppRootStoreType = ReturnType<typeof store.getState>
-export type AppDispatch = ThunkDispatch<AppRootStoreType, unknown, AppActionType>
+export type AppDispatch = ThunkDispatch<AppRootStoreType, unknown, AnyAction>
 //hooks
 
 
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStoreType, unknown, AppActionType>
-type AppActionType =
-    | AppReducerActionType
-    | AuthReducerActionType
-    | FilterReducerType
-    | any
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppRootStoreType, unknown, AnyAction>
 
