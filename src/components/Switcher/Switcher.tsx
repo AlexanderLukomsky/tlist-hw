@@ -1,16 +1,17 @@
 import { Button } from "@mui/material"
 import { useState } from "react"
+import { FilterType } from "../../common/reducers/filter-reducer"
 import './switcher.scss'
 type SwitcherPropsType = {
-    titles: string[]
-    callback: (selectedValue: string) => void
+    titles: FilterType[]
+    callback: (selectedValue: FilterType) => void
     selectedValue?: string
 }
 export const Switcher: React.FC<SwitcherPropsType> = (
     props
 ) => {
     const [selectedValue, setSelectedValue] = useState<string>(props.selectedValue ? props.selectedValue : props.titles[0])
-    const changeSelectedValue = (title: string) => {
+    const changeSelectedValue = (title: FilterType) => {
         props.callback(title)
         setSelectedValue(title);
     }

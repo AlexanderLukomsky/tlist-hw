@@ -2,16 +2,16 @@ import React, { useEffect } from "react"
 import { useSelector } from 'react-redux';
 import { Navigate } from "react-router-dom";
 import { AddItem } from "../../components/AddItem/AddItem";
-import { createTodolistTC, fetchTodolistsTC } from "../../store/reducers/todolist-reducer"
-import { returnTasks, returnTodolists } from "../../store/selector/selector"
-import { useAppDispatch, useAppSelector } from "../../store/store";
+import { createTodolistTC, fetchTodolistsTC } from "./todolist-reducer"
+import { selectTodolists } from "./selector"
+import { useAppDispatch } from "../../store/store";
+import { selectIsLoggedIn } from "../auth/selectors";
 import { Todolist } from "./Todolist/Todolist"
 
-export const TodolistsList: React.FC = React.memo(() => {
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+export const Todolists: React.FC = React.memo(() => {
+    const isLoggedIn = useSelector(selectIsLoggedIn)
     const dispatch = useAppDispatch()
-    const tasks = useSelector(returnTasks)
-    const todolists = useSelector(returnTodolists)
+    const todolists = useSelector(selectTodolists)
     useEffect(() => {
         if (isLoggedIn) {
             dispatch(fetchTodolistsTC())
@@ -26,7 +26,7 @@ export const TodolistsList: React.FC = React.memo(() => {
             </div>
             <div className="todolists-list">
                 {todolists.map(t =>
-                    <Todolist key={t.id} todolist={t} tasks={tasks[t.id]} />
+                    <Todolist key={t.id} todolist={t} todolistID={t.id} />
                 )}
             </div>
 

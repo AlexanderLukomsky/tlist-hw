@@ -1,17 +1,22 @@
 import { AppBar, Button, CircularProgress, LinearProgress, Toolbar } from "@mui/material";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
-import { Login } from "../features/Login/Login";
-import { TodolistsList } from "../features/TodolistsList/TodolistsList";
-import { setInitializedAppTC } from "../store/reducers/app-reducer";
-import { logoutTC } from "../store/reducers/auth-reducer";
-import { useAppDispatch, useAppSelector } from "../store/store";
+import { authSelectors } from "../features/auth";
+import { logoutTC } from "../features/auth/auth-reducer";
+import { Login } from "../features/auth/Login";
+import { useAppDispatch } from "../store/store";
+import { setInitializedAppTC } from "./app-reducer";
+import { selectAppStatus, selectIsInitializedApp } from "./selectors";
+import { Todolists } from './../features/todolists/Todolists';
+
 
 export const App: React.FC = () => {
-    const status = useAppSelector(state => state.app.status)
-    const isInitializedApp = useAppSelector(state => state.app.isInitializedApp)
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
+    const status = useSelector(selectAppStatus)
+    const isInitializedApp = useSelector(selectIsInitializedApp)
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
     const dispatch = useAppDispatch()
     const logOut = () => {
         dispatch(logoutTC())
@@ -48,8 +53,8 @@ export const App: React.FC = () => {
             </AppBar>
             <div className={`container`}>
                 <Routes>
-                    <Route path={'/todolists'} element={<TodolistsList />} />
-                    <Route path={'/'} element={<TodolistsList />} />
+                    <Route path={'/todolists'} element={<Todolists />} />
+                    <Route path={'/'} element={<Todolists />} />
                     <Route path="login" element={<Login />} />
                     <Route path="404" element={<h1 style={{ fontSize: '36px', textAlign: 'center' }}>404</h1>} />
                     <Route path="*" element={<Navigate to="404" />} />

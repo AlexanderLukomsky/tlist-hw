@@ -1,11 +1,10 @@
-type TodolistFilterType = 'all' | 'active' | 'completed'
-
+import { FilterType } from '../common/reducers/filter-reducer';
 export type TodolistType = TodolistResponseType & {
     id: string
     title: string,
     addedDate: string,
     order: number
-    filter: TodolistFilterType,
+    filter: FilterType,
     requestStatus: TodolistRequestStatus
 }
 export type TodolistResponseType = {

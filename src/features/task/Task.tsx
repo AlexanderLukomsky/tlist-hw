@@ -4,9 +4,8 @@ import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUnc
 import { Checkbox, IconButton } from "@mui/material"
 import React from "react"
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-
-import { ChangeableTitle } from "../../../../components/ChangeableTitle/ChangeableTitle"
-import { TaskStatus, TaskType } from "../../../../types/TaskType"
+import { ChangeableTitle } from "../../components/ChangeableTitle/ChangeableTitle"
+import { TaskStatus, TaskType } from "../../types/TaskType"
 
 type TaskPropsType = {
     todolistRequestStatus: boolean

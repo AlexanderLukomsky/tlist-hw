@@ -1,11 +1,11 @@
-import { TodolistResponseType } from './../../types/TodolistType';
+import { TodolistResponseType } from '../../types/TodolistType';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { handleServerAppError, handleServerNetworkError } from './../utils/utils';
-import { setAppStatusAC } from './app-reducer';
+import { handleServerAppError, handleServerNetworkError } from '../../store/utils/utils';
+import { setAppStatusAC } from '../../app/app-reducer';
 import { todolist_api } from "../../api/todolist-api";
 import { TodolistRequestStatus, TodolistType } from "../../types/TodolistType";
 import { ResultCodeType } from '../../api/instance';
-import { AppThunk } from '../store';
+import { AppThunk } from '../../store/store';
 const initialState: TodolistType[] = []
 //reducer
 const slice = createSlice({

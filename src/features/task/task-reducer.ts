@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { setAppStatusAC } from './app-reducer';
-import { AppRootStoreType, AppThunk } from './../store';
-import { DeleteTodolistACType, SetTodolistsACType, CreateTodolistACType, setTodolistsAC, deleteTodolistAC, createTodolistAC } from './todolist-reducer';
-import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType, UpdateTaskType } from './../../types/TaskType';
+import { setAppStatusAC } from '../../app/app-reducer';
+import { AppRootStoreType, AppThunk } from '../../store/store';
+import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType, UpdateTaskType } from '../../types/TaskType';
 import { task_api } from '../../api/task-api';
-import { handleServerAppError, handleServerNetworkError } from '../utils/utils';
+import { handleServerAppError, handleServerNetworkError } from '../../store/utils/utils';
 import { ResultCodeType } from '../../api/instance';
 import { TodolistResponseType } from '../../types/TodolistType';
+import { deleteTodolistAC, setTodolistsAC } from '../todolists/todolist-reducer';
+import { createTodolistAC } from './../todolists/todolist-reducer';
 const initialState: TasksStateType = {}
 //reducer
 const slice = createSlice({
@@ -113,13 +114,10 @@ export const updateTaskTC = (payload: { todolistID: string, taskID: string, task
     }
 //types
 export type TaskReducerActionType =
-    | SetTodolistsACType
     | SetTasksACType
     | CreateTaskACType
     | DeleteTaskACType
     | UpdateTaskACType
-    | DeleteTodolistACType
-    | CreateTodolistACType
 type SetTasksACType = ReturnType<typeof setTasksAC>
 type CreateTaskACType = ReturnType<typeof createTaskAC>
 type DeleteTaskACType = ReturnType<typeof deleteTaskAC>

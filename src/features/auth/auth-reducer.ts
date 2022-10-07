@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppThunk } from './../store';
-import { setAppStatusAC } from './app-reducer';
+import { AppThunk } from '../../store/store';
+import { setAppStatusAC } from '../../app/app-reducer';
 import { authAPI } from '../../api/auth-api';
 import { authDataType } from "../../api/auth-api"
 import { ResultCodeType } from '../../api/instance';
-import { handleServerAppError, handleServerNetworkError } from '../utils/utils';
+import { handleServerAppError, handleServerNetworkError } from '../../store/utils/utils';
 
 
 const initialState: InitialStateType = {

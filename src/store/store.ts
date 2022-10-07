@@ -1,9 +1,10 @@
 import { configureStore, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector, useDispatch } from 'react-redux';
-import { appReducer, AppReducerActionType } from "./reducers/app-reducer";
-import { taskReducer, TaskReducerActionType } from "./reducers/task-reducer";
-import { todolistReducer, TodolistReducerActionType } from "./reducers/todolist-reducer";
-import { authReducer, AuthReducerActionType } from './reducers/auth-reducer';
+import { appReducer, AppReducerActionType } from "../app/app-reducer";
+import { taskReducer, TaskReducerActionType } from "../features/task/task-reducer";
+import { authReducer, AuthReducerActionType } from '../features/auth/auth-reducer';
+import { filterReducer, FilterReducerType } from '../common/reducers/filter-reducer';
+import { todolistReducer, TodolistReducerActionType } from './../features/todolists/todolist-reducer';
 
 
 export const store = configureStore({
@@ -11,7 +12,8 @@ export const store = configureStore({
         tasks: taskReducer,
         todolists: todolistReducer,
         app: appReducer,
-        auth: authReducer
+        auth: authReducer,
+        filter: filterReducer
     }
 })
 export type AppRootStoreType = ReturnType<typeof store.getState>
@@ -26,3 +28,4 @@ type AppActionType =
     | AppReducerActionType
     | TaskReducerActionType
     | AuthReducerActionType
+    | FilterReducerType

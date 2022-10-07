@@ -1,26 +1,28 @@
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import { IconButton } from "@mui/material"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, FC } from "react"
 import { AddItem } from "../../../components/AddItem/AddItem"
 import { ChangeableTitle } from "../../../components/ChangeableTitle/ChangeableTitle"
 import { Switcher } from "../../../components/Switcher/Switcher"
-import { createTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC } from "../../../store/reducers/task-reducer"
-import { changeTodolistTitleTC, deleteTodolistTC } from "../../../store/reducers/todolist-reducer"
-import { TaskStatus, TaskType } from "../../../types/TaskType"
+import { changeFilter, FilterType } from "../../../common/reducers/filter-reducer"
+import { createTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC } from "../../task/task-reducer"
+import { useAppDispatch, useAppSelector } from "../../../store/store"
+import { TaskStatus } from "../../../types/TaskType"
 import { TodolistType } from "../../../types/TodolistType"
-import { Task } from "./Task/Task"
-import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
-import { useAppDispatch } from "../../../store/store"
-type FilterValueType = 'all' | 'active' | 'completed'
+import { changeTodolistTitleTC, deleteTodolistTC } from "../todolist-reducer"
+import { selectFilteredTasks } from '../selector'
+import { Task } from "../../task/Task"
 type TodolistPropsType = {
-    todolist: TodolistType
-    tasks: TaskType[]
+    todolist: TodolistType,
+    todolistID: string
 }
-export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...props }: TodolistPropsType) => {
+export const Todolist: FC<TodolistPropsType> = React.memo(({ todolist, todolistID }: TodolistPropsType) => {
+
     const dispatch = useAppDispatch()
+    const tasks = useAppSelector(state => selectFilteredTasks(state, todolistID))
     useEffect(() => {
         dispatch(fetchTasksTC(todolist.id))
     }, [dispatch, todolist.id])
-    const [filterValue, setFilterValue] = useState<FilterValueType>('all')
     //dispatch todolist TC
     const changeTodolistTitle = (payload: { title: string, todolistID: string }) => {
         dispatch(changeTodolistTitleTC(payload))
@@ -43,20 +45,8 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...
         dispatch(updateTaskTC(payload))
     }
     //filter
-    const changeFilter = (filterValue: string) => {
-        switch (filterValue) {
-            case 'all': setFilterValue(filterValue); break
-            case 'active': setFilterValue(filterValue); break
-            case 'completed': setFilterValue(filterValue); break
-            default: return
-        }
-    }
-    const sortedTask = (tasks: TaskType[], filterValue: FilterValueType) => {
-        switch (filterValue) {
-            case 'active': return tasks.filter(t => t.status === TaskStatus.NotCompleted)
-            case 'completed': return tasks.filter(t => t.status !== TaskStatus.NotCompleted)
-            default: return tasks
-        }
+    const onChangeFilter = (filterValue: FilterType) => {
+        dispatch(changeFilter({ filterValue }))
     }
     const disabledTodo = todolist.requestStatus === 'loading'
     return (
@@ -76,7 +66,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...
                 <AddItem callback={createTask} disabled={disabledTodo} />
                 <ul className="todolist__tasks">
                     {
-                        sortedTask(props.tasks, filterValue).map(task =>
+                        tasks.map(task =>
                             <Task
                                 todolistRequestStatus={disabledTodo}
                                 task={task}
@@ -89,7 +79,7 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...
                     }
                 </ul>
                 <div className="todolist__filter">
-                    <Switcher titles={['all', 'active', 'completed']} callback={changeFilter} />
+                    <Switcher titles={['all', 'active', 'completed']} callback={onChangeFilter} />
                 </div>
             </div>
         </div>
