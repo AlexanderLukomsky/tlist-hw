@@ -21,7 +21,7 @@ export const App: React.FC = () => {
         dispatch(logoutTC())
     }
     useEffect(() => {
-        dispatch(setInitializedAppTC())
+        setInitializedAppTC()
     }, [dispatch])
 
     if (!isInitializedApp) {

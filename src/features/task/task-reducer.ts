@@ -1,6 +1,4 @@
 import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType, UpdateTaskType } from '../../types/TaskType';
-import { deleteTodolistAC, setTodolists } from '../todolists/todolist-reducer';
-import { createTodolistAC } from './../todolists/todolist-reducer';
 import { ResultCodeType } from '../../api/instance';
 import { task_api } from '../../api/task-api';
 import { setAppStatusAC } from '../../app/app-reducer';
@@ -8,6 +6,7 @@ import { AppRootStoreType, AppThunk } from '../../store/store';
 import { handleServerAppError, handleServerNetworkError } from '../../store/utils/utils';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TodolistResponseType } from '../../types/TodolistType';
+import { todolistActions } from '../todolists/';
 //reducer
 const slice = createSlice({
     name: 'tasks',
@@ -29,13 +28,13 @@ const slice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(setTodolists, (state, action) => {
+        builder.addCase(todolistActions.setTodolists, (state, action) => {
             action.payload.todolists.forEach((t: TodolistResponseType) => state[t.id] = [])
         })
-        builder.addCase(createTodolistAC, (state, action) => {
+        builder.addCase(todolistActions.createTodolistAC, (state, action) => {
             state[action.payload.todolist.id] = []
         })
-        builder.addCase(deleteTodolistAC, (state, action) => {
+        builder.addCase(todolistActions.deleteTodolistAC, (state, action) => {
             delete state[action.payload.todolistID]
         })
     }
@@ -43,10 +42,10 @@ const slice = createSlice({
 export const taskReducer = slice.reducer
 
 //actions
-export const { setTasksAC, createTaskAC, deleteTaskAC, updateTaskAC } = slice.actions
+const { setTasksAC, createTaskAC, deleteTaskAC, updateTaskAC } = slice.actions
 export const actions = slice.actions
 //thunks
-export const fetchTasks = (todolistID: string): AppThunk => (dispatch) => {
+const fetchTasks = (todolistID: string): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC({ status: 'loading' }))
     task_api.getTask(todolistID)
         .then(res => {
@@ -57,7 +56,7 @@ export const fetchTasks = (todolistID: string): AppThunk => (dispatch) => {
             handleServerNetworkError(error.message, dispatch)
         })
 }
-export const createTask = (payload: { todolistID: string, title: string }): AppThunk => (dispatch) => {
+const createTask = (payload: { todolistID: string, title: string }): AppThunk => (dispatch) => {
     //dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'loading' }))
     dispatch(setAppStatusAC({ status: 'loading' }))
     task_api.createTask(payload)
@@ -73,7 +72,7 @@ export const createTask = (payload: { todolistID: string, title: string }): AppT
             handleServerNetworkError(error.message, dispatch)
         })
 }
-export const deleteTask = (payload: { todolistID: string, taskID: string }): AppThunk => (dispatch) => {
+const deleteTask = (payload: { todolistID: string, taskID: string }): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC({ status: 'loading' }))
     task_api.deleteTask(payload)
         .then(() => {
@@ -83,7 +82,7 @@ export const deleteTask = (payload: { todolistID: string, taskID: string }): App
             handleServerNetworkError(error.message, dispatch)
         })
 }
-export const updateTask = (payload: { todolistID: string, taskID: string, taskModel: UpdateTaskOptionalPropertiesType }): AppThunk =>
+const updateTask = (payload: { todolistID: string, taskID: string, taskModel: UpdateTaskOptionalPropertiesType }): AppThunk =>
     (dispatch, getState: () => AppRootStoreType) => {
         dispatch(setAppStatusAC({ status: 'loading' }))
         const task = getState().tasks[payload.todolistID]

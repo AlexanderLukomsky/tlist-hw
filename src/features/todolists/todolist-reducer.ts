@@ -32,10 +32,10 @@ const slice = createSlice({
 })
 export const todolistReducer = slice.reducer
 //actions
-export const { setTodolists, setNewTodolistTitle, deleteTodolistAC, createTodolistAC, changeTodolistRequestStatusAC } = slice.actions
+const { setTodolists, setNewTodolistTitle, deleteTodolistAC, createTodolistAC, changeTodolistRequestStatusAC } = slice.actions
 export const actions = slice.actions
 //thunks
-export const fetchTodolists = (): AppThunk => async (dispatch) => {
+const fetchTodolists = (): AppThunk => async (dispatch) => {
     dispatch(setAppStatusAC({ status: 'loading' }))
     try {
         const res = await todolist_api.getTodolist()
@@ -46,7 +46,7 @@ export const fetchTodolists = (): AppThunk => async (dispatch) => {
     }
 }
 
-export const changeTodolistTitle = (payload: { todolistID: string, title: string }): AppThunk => async (dispatch) => {
+const changeTodolistTitle = (payload: { todolistID: string, title: string }): AppThunk => async (dispatch) => {
     dispatch(setAppStatusAC({ status: 'loading' }))
     dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'loading' }))
     try {
@@ -65,7 +65,7 @@ export const changeTodolistTitle = (payload: { todolistID: string, title: string
     }
 }
 
-export const deleteTodolist = (todolistID: string): AppThunk =>
+const deleteTodolist = (todolistID: string): AppThunk =>
     async (dispatch) => {
         dispatch(changeTodolistRequestStatusAC({ todolistID, status: 'loading' }))
         try {
@@ -76,7 +76,7 @@ export const deleteTodolist = (todolistID: string): AppThunk =>
         }
     }
 
-export const createTodolist = (title: string): AppThunk =>
+const createTodolist = (title: string): AppThunk =>
     async (dispatch) => {
         try {
             const res = await todolist_api.createTodolist(title)
