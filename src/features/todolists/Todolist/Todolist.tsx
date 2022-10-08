@@ -17,21 +17,13 @@ type TodolistPropsType = {
     todolistID: string
 }
 export const Todolist: FC<TodolistPropsType> = React.memo(({ todolist, todolistID }: TodolistPropsType) => {
-    const { fetchTasks, createTask, deleteTask, updateTask } = useActions(tasksActions)
+    const { fetchTasks, createTask } = useActions(tasksActions)
     const { changeTodolistTitle, deleteTodolist } = useActions(todolistActions)
     const dispatch = useAppDispatch()
     const tasks = useAppSelector(state => selectFilteredTasks(state, todolistID))
     useEffect(() => {
         fetchTasks(todolist.id)
     }, [todolist.id, fetchTasks])
-    //dispatch task TC
-    const changeTaskStatus = (payload: { todolistID: string, taskID: string, status: boolean }) => {
-        const convertStatusToTaskStatusType = payload.status ? TaskStatus.Completed : TaskStatus.NotCompleted
-        updateTask({ todolistID: payload.todolistID, taskID: payload.taskID, taskModel: { status: convertStatusToTaskStatusType } })
-    }
-    const changeTaskTitle = (payload: { todolistID: string, taskID: string, taskModel: { title: string } }) => {
-        updateTask(payload)
-    }
     //filter
     const onChangeFilter = (filterValue: FilterType) => {
         dispatch(changeFilter({ filterValue }))
@@ -56,11 +48,7 @@ export const Todolist: FC<TodolistPropsType> = React.memo(({ todolist, todolistI
                     {
                         tasks.map(task =>
                             <Task
-                                todolistRequestStatus={disabledTodo}
                                 task={task}
-                                deleteTask={deleteTask}
-                                changeTaskStatus={changeTaskStatus}
-                                changeTaskTitle={changeTaskTitle}
                                 key={task.id}
                             />
                         )

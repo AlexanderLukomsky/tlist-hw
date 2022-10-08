@@ -1,7 +1,7 @@
 import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, Grid, TextField } from "@mui/material"
 import { useFormik } from "formik";
 import { Navigate } from "react-router-dom";
-import { authTC } from "./auth-reducer";
+import { login } from "./auth-reducer";
 import { useAppDispatch } from "../../store/store";
 import './login.scss'
 import { selectIsLoggedIn } from "./selectors";
@@ -35,7 +35,7 @@ export const Login = () => {
             }
             return errors;
         },
-        onSubmit: values => {
+        onSubmit: async values => {
             const data = {
                 email: values.text,
                 password: values.password === DEFAULT_PASSWORD ? process.env.REACT_APP_LOGIN_PASSWORD as string : values.password,
@@ -46,8 +46,10 @@ export const Login = () => {
                 password: values.password,
                 rememberMe: values.rememberMe
             })
-            dispatch(authTC(data))
-            formik.resetForm()
+            const action = await dispatch(login(data))
+            if (login.fulfilled.match(action)) {
+                formik.resetForm()
+            }
         },
     });
     if (isLoggedIn) { return <Navigate to='/todolists' /> }

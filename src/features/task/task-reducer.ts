@@ -6,7 +6,7 @@ import { AppRootStoreType, AppThunk } from '../../store/store';
 import { handleServerAppError, handleServerNetworkError } from '../../store/utils/utils';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TodolistResponseType } from '../../types/TodolistType';
-import { todolistActions } from '../todolists/';
+import { actions as todolistActions } from './../todolists/todolist-reducer';
 //reducer
 const slice = createSlice({
     name: 'tasks',

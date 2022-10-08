@@ -3,24 +3,30 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import { Checkbox, IconButton } from "@mui/material";
 import { FC } from "react";
+import { tasksActions } from '.';
 import { ChangeableTitle } from "../../components/ChangeableTitle/ChangeableTitle";
+import { useActions } from '../../store/store';
 import { TaskStatus, TaskType } from "../../types/TaskType";
 import './task.scss';
 
 type TaskPropsType = {
-    todolistRequestStatus: boolean
     task: TaskType
-    deleteTask: (payload: { todolistID: string, taskID: string }) => void
-    changeTaskStatus: (payload: { todolistID: string, taskID: string, status: boolean }) => void
-    changeTaskTitle: (payload: { todolistID: string, taskID: string, taskModel: { title: string } }) => void
 }
-export const Task: FC<TaskPropsType> = ({ task, deleteTask, changeTaskTitle, changeTaskStatus }) => {
+export const Task: FC<TaskPropsType> = ({ task }) => {
+    const { deleteTask, updateTask } = useActions(tasksActions)
     const convertToBooleanStatus = (status: TaskStatus) => {
         switch (status) {
             case TaskStatus.Completed: return true
             case TaskStatus.NotCompleted: return false
             default: return false
         }
+    }
+    const changeTaskStatus = (payload: { todolistID: string, taskID: string, status: boolean }) => {
+        const convertStatusToTaskStatusType = payload.status ? TaskStatus.Completed : TaskStatus.NotCompleted
+        updateTask({ todolistID: payload.todolistID, taskID: payload.taskID, taskModel: { status: convertStatusToTaskStatusType } })
+    }
+    const changeTaskTitle = (payload: { todolistID: string, taskID: string, taskModel: { title: string } }) => {
+        updateTask(payload)
     }
     return (
         <li className='task'>
