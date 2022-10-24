@@ -1,7 +1,7 @@
-import './addItem.scss'
-import { IconButton, TextField } from "@mui/material";
-import { useState, ChangeEvent, KeyboardEvent } from "react";
 import AddTaskSharpIcon from '@mui/icons-material/AddTaskSharp';
+import { IconButton, TextField } from "@mui/material";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
+import './addItem.scss';
 
 type AddItemPropsType = {
     callback: (title: string) => void
@@ -11,7 +11,6 @@ type AddItemPropsType = {
 export const AddItem = ({ disabled, ...props }: AddItemPropsType) => {
     const [value, setValue] = useState('')
     const [error, setError] = useState('')
-    const [convertToTextarea, setConvertToTextarea] = useState(false)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
     }

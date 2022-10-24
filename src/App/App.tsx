@@ -8,7 +8,7 @@ import { Login } from "../features/auth/Login";
 import { selectIsLoggedIn } from "../features/auth/selectors";
 import { useAppDispatch } from "../store/store";
 import { Todolists } from './../features/todolists/Todolists';
-import { asyncAction } from "./app-reducer";
+import { setInitializedAppTC } from "./app-reducer";
 import { selectAppStatus, selectIsInitializedApp } from "./selectors";
 
 export const App: React.FC = () => {
@@ -21,9 +21,10 @@ export const App: React.FC = () => {
         dispatch(logoutTC())
     }
     useEffect(() => {
-        console.log('object');
-        dispatch(asyncAction.setInitializedAppTC())
-    }, [dispatch])
+        if (!isInitializedApp) {
+            dispatch(setInitializedAppTC())
+        }
+    }, [dispatch, isInitializedApp])
 
     if (!isInitializedApp) {
         return <div style={{ position: 'absolute', top: '50%', left: '50%', right: '50%' }}>

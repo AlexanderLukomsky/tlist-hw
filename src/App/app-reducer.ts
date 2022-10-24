@@ -41,5 +41,4 @@ export const setInitializedAppTC = (): AppThunk => (dispatch) => {
             handleServerNetworkError(error.message, dispatch)
         })
 }
-export const asyncAction = { setInitializedAppTC }
 type RequestStatusType = 'idle' | 'loading' | 'successed' | 'failed'
