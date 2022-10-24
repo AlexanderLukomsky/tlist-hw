@@ -1,9 +1,7 @@
-import axios from "axios"
 import { TaskType, UpdateTaskType } from "../types/TaskType"
 import { ResponseType, _instance } from "./instance"
 export const task_api = {
     getTask: (todolistID: string) => {
-        console.log(todolistID);
         return _instance.get<{ items: TaskType[] }>(`todo-lists/${todolistID}/tasks`)
     },
     createTask: (payload: { todolistID: string, title: string }) => {

@@ -23,7 +23,6 @@ export const App: React.FC = () => {
     useEffect(() => {
         dispatch(setInitializedAppTC())
         if (!isLoggedIn) {
-            console.log('object');
             navigate('/login')
         }
     }, [isLoggedIn])
