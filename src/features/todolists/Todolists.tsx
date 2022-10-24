@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { Navigate } from "react-router-dom";
-import { todolistActions } from ".";
 import { AddItem } from "../../components/AddItem/AddItem";
 import { useActions } from "../../store/store";
 import { selectIsLoggedIn } from "../auth/selectors";
 import { selectTodolists } from "./selector";
+import { todolistAsyncActions } from "./todolist-reducer";
 import { Todolist } from "./Todolist/Todolist";
 
 export const Todolists: React.FC = React.memo(() => {
-    const { fetchTodolists, createTodolist } = useActions(todolistActions)
+    const { fetchTodolists, createTodolist } = useActions(todolistAsyncActions)
     const isLoggedIn = useSelector(selectIsLoggedIn)
     const todolists = useSelector(selectTodolists)
     useEffect(() => {

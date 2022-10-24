@@ -9,9 +9,9 @@ type AddItemPropsType = {
 }
 
 export const AddItem = ({ disabled, ...props }: AddItemPropsType) => {
-    const [value, setValue] = useState<string>('')
-    const [error, setError] = useState<string>('')
-    const [convertToTextarea, setConvertToTextarea] = useState<boolean>(false)
+    const [value, setValue] = useState('')
+    const [error, setError] = useState('')
+    const [convertToTextarea, setConvertToTextarea] = useState(false)
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.currentTarget.value)
     }

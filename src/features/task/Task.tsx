@@ -3,17 +3,17 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import RadioButtonUncheckedOutlinedIcon from '@mui/icons-material/RadioButtonUncheckedOutlined';
 import { Checkbox, IconButton } from "@mui/material";
 import { FC } from "react";
-import { tasksActions } from '.';
 import { ChangeableTitle } from "../../components/ChangeableTitle/ChangeableTitle";
 import { useActions } from '../../store/store';
 import { TaskStatus, TaskType } from "../../types/TaskType";
+import { tasksAsyncActions } from './task-reducer';
 import './task.scss';
 
 type TaskPropsType = {
     task: TaskType
 }
 export const Task: FC<TaskPropsType> = ({ task }) => {
-    const { deleteTask, updateTask } = useActions(tasksActions)
+    const { deleteTask, updateTask } = useActions(tasksAsyncActions)
     const convertToBooleanStatus = (status: TaskStatus) => {
         switch (status) {
             case TaskStatus.Completed: return true

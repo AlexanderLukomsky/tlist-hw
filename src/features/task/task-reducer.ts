@@ -43,7 +43,7 @@ export const taskReducer = slice.reducer
 
 //actions
 const { setTasksAC, createTaskAC, deleteTaskAC, updateTaskAC } = slice.actions
-export const actions = slice.actions
+
 //thunks
 const fetchTasks = (todolistID: string): AppThunk => (dispatch) => {
     dispatch(setAppStatusAC({ status: 'loading' }))
@@ -109,6 +109,6 @@ const updateTask = (payload: { todolistID: string, taskID: string, taskModel: Up
                 handleServerNetworkError(error.message, dispatch)
             })
     }
-export const asyncActions = { updateTask, deleteTask, createTask, fetchTasks }
-
+export const tasksAsyncActions = { updateTask, deleteTask, createTask, fetchTasks }
+export const tasksActions = slice.actions
 

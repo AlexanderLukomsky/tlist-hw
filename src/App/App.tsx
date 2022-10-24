@@ -3,8 +3,9 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
-import { authSelectors, Login } from "../features/auth";
 import { logoutTC } from "../features/auth/auth-reducer";
+import { Login } from "../features/auth/Login";
+import { selectIsLoggedIn } from "../features/auth/selectors";
 import { useAppDispatch } from "../store/store";
 import { Todolists } from './../features/todolists/Todolists';
 import { asyncAction } from "./app-reducer";
@@ -13,13 +14,14 @@ import { selectAppStatus, selectIsInitializedApp } from "./selectors";
 export const App: React.FC = () => {
     const status = useSelector(selectAppStatus)
     const isInitializedApp = useSelector(selectIsInitializedApp)
-    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
 
     const dispatch = useAppDispatch()
     const logOut = () => {
         dispatch(logoutTC())
     }
     useEffect(() => {
+        console.log('object');
         dispatch(asyncAction.setInitializedAppTC())
     }, [dispatch])
 

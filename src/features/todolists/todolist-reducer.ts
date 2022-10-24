@@ -89,4 +89,4 @@ const createTodolist = (title: string): AppThunk =>
             handleServerNetworkError((err as Error).message, dispatch)
         }
     }
-export const asyncActions = { fetchTodolists, changeTodolistTitle, deleteTodolist, createTodolist }
+export const todolistAsyncActions = { fetchTodolists, changeTodolistTitle, deleteTodolist, createTodolist }

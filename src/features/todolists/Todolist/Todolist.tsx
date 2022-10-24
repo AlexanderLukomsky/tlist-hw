@@ -6,19 +6,18 @@ import { ChangeableTitle } from "../../../components/ChangeableTitle/ChangeableT
 import { Switcher } from "../../../components/Switcher/Switcher"
 import { changeFilter, FilterType } from "../../../common/reducers/filter-reducer"
 import { useActions, useAppDispatch, useAppSelector } from "../../../store/store"
-import { TaskStatus } from "../../../types/TaskType"
 import { TodolistType } from "../../../types/TodolistType"
 import { selectFilteredTasks } from '../selector'
 import { Task } from "../../task/Task"
-import { tasksActions } from '../../task'
-import { todolistActions } from '..'
+import { todolistAsyncActions } from '../todolist-reducer'
+import { tasksAsyncActions } from '../../task/task-reducer'
 type TodolistPropsType = {
     todolist: TodolistType,
     todolistID: string
 }
 export const Todolist: FC<TodolistPropsType> = React.memo(({ todolist, todolistID }: TodolistPropsType) => {
-    const { fetchTasks, createTask } = useActions(tasksActions)
-    const { changeTodolistTitle, deleteTodolist } = useActions(todolistActions)
+    const { fetchTasks, createTask } = useActions(tasksAsyncActions)
+    const { changeTodolistTitle, deleteTodolist } = useActions(todolistAsyncActions)
     const dispatch = useAppDispatch()
     const tasks = useAppSelector(state => selectFilteredTasks(state, todolistID))
     useEffect(() => {
