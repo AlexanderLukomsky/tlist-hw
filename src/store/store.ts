@@ -1,11 +1,18 @@
-import { TypedUseSelectorHook, useSelector } from 'react-redux';
-
 import { configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useSelector } from 'react-redux';
 import { combineReducers } from "redux";
-import { appReducer } from "./reducers/app-reducer";
+import { appReducer, setInitializedApp } from "./reducers/app-reducer";
+import { authReducer } from './reducers/auth-reducer';
 import { taskReducer } from "./reducers/task-reducer";
 import { todolistReducer } from "./reducers/todolist-reducer";
-import { authReducer } from './reducers/auth-reducer';
+
+//base import for redux-saga
+import { takeEvery } from 'redux-saga/effects';
+import createSagaMiddleware from 'redux-saga';
+//redux-saga create middleware
+
+const sagaMiddleware = createSagaMiddleware()
+
 const rootReducer = combineReducers({
     tasks: taskReducer,
     todolists: todolistReducer,
@@ -14,6 +21,16 @@ const rootReducer = combineReducers({
 })
 export const store = configureStore({
     reducer: rootReducer,
+    //middleware for redux-saga
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(sagaMiddleware),
 })
 export type AppRootStoreType = ReturnType<typeof rootReducer>
 export const useAppSelector: TypedUseSelectorHook<AppRootStoreType> = useSelector
+
+//connect Action for saga-middlewaer
+sagaMiddleware.run(rootWatcher)
+//create generator function for Action 
+function* rootWatcher() {
+    yield takeEvery('APP/INITIALIZE-APP', setInitializedApp)
+}

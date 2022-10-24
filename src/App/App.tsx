@@ -5,7 +5,7 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 import { Login } from "../features/Login/Login";
 import { TodolistsList } from "../features/TodolistsList/TodolistsList";
-import { setInitializedAppTC } from "../store/reducers/app-reducer";
+import { initializedApp } from "../store/reducers/app-reducer";
 import { logoutTC } from "../store/reducers/auth-reducer";
 import { useAppSelector } from "../store/store";
 
@@ -21,7 +21,7 @@ export const App: React.FC = () => {
     }
 
     useEffect(() => {
-        dispatch(setInitializedAppTC())
+        dispatch(initializedApp())
         if (!isLoggedIn) {
             navigate('/login')
         }

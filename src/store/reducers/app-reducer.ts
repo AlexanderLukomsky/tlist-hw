@@ -2,7 +2,7 @@ import { Dispatch } from "redux"
 import { authAPI } from "../../api/auth-api"
 import { ResultCodeType } from "../../api/instance"
 import { setIsLoggedInAC } from "./auth-reducer"
-
+import { call, put } from 'redux-saga/effects'
 //initial state
 const initialState: InitialStateType = {
     status: 'idle',
@@ -37,16 +37,7 @@ export const setInitializedAppAC = (isInitializedApp: boolean) => (
         isInitializedApp
     } as const
 )
-//thunks
-export const setInitializedAppTC = () => (dispatch: Dispatch) => {
-    authAPI.authMe()
-        .then(res => {
-            if (res.data.resultCode === ResultCodeType.Ok) {
-                dispatch(setIsLoggedInAC(true))
-            }
-            dispatch(setInitializedAppAC(true))
-        })
-}
+
 //types
 export type InitialStateType = {
     status: RequestStatusType
@@ -61,3 +52,15 @@ type ActionsType =
 export type SetAppErrorACType = ReturnType<typeof setAppErrorAC>
 export type SetAppStatusACType = ReturnType<typeof setAppStatusAC>
 export type SetInitializedAppACType = ReturnType<typeof setInitializedAppAC>
+
+
+//create saga Action
+export const initializedApp = () => ({ type: 'APP/INITIALIZE-APP' } as const)
+//create saga worker
+export function* setInitializedApp(): any {
+    const res = yield call(authAPI.authMe)
+    if (res.data.resultCode === ResultCodeType.Ok) {
+        yield put(setIsLoggedInAC(true))
+    }
+    yield put(setInitializedAppAC(true))
+} 
