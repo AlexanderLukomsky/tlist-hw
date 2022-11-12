@@ -5,9 +5,9 @@ import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { ErrorSnackbar } from "../components/ErrorSnackbar/ErrorSnackbar";
 import { Login } from "../features/Login/Login";
 import { TodolistsList } from "../features/TodolistsList/TodolistsList";
-import { initializedApp } from "../store/reducers/app-reducer";
 import { logoutTC } from "../store/reducers/auth-reducer";
 import { useAppSelector } from "../store/store";
+import { initializedApp } from "./app-sagas";
 
 export const App: React.FC = () => {
     const status = useAppSelector(state => state.app.status)

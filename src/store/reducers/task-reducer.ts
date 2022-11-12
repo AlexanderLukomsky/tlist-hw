@@ -1,11 +1,11 @@
-import { setAppErrorAC, SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from './app-reducer';
-import { AppRootStoreType } from './../store';
-import { DeleteTodolistACType, SetTodolistsACType, CreateTodolistACType, ChangeTodolistRequestStatusACType, changeTodolistRequestStatusAC } from './todolist-reducer';
-import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType, UpdateTaskType } from './../../types/TaskType';
 import { Dispatch } from 'redux';
+import { ResultCodeType } from '../../api/instance';
 import { task_api } from '../../api/task-api';
 import { handleServerAppError, handleServerNetworkError } from '../utils/utils';
-import { ResultCodeType } from '../../api/instance';
+import { TasksStateType, TaskType, UpdateTaskOptionalPropertiesType, UpdateTaskType } from './../../types/TaskType';
+import { AppRootStoreType } from './../store';
+import { SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from '../../app/app-reducer';
+import { ChangeTodolistRequestStatusACType, CreateTodolistACType, DeleteTodolistACType, SetTodolistsACType } from './todolist-reducer';
 
 
 export const taskReducer = (state: TasksStateType = {}, action: TaskReducerActionType): TasksStateType => {
@@ -63,43 +63,9 @@ export const updateTaskAC = (payload: { todolistID: string, taskID: string, task
     } as const
 )
 //thunks
-export const fetchTasksTC = (todolistID: string) => (dispatch: Dispatch<SetTasksACType | SetAppStatusACType>) => {
-    dispatch(setAppStatusAC('loading'))
-    task_api.getTask(todolistID)
-        .then(res => {
-            dispatch(setTasksAC({ todolistID, tasks: res.data.items }))
-            dispatch(setAppStatusAC('successed'))
-        })
-        .catch(error => {
-            handleServerNetworkError(error.message, dispatch)
-        })
-}
-export const createTaskTC = (payload: { todolistID: string, title: string }) => (dispatch: Dispatch<ThunkDispatchActionType>) => {
-    //dispatch(changeTodolistRequestStatusAC({ todolistID: payload.todolistID, status: 'loading' }))
-    dispatch(setAppStatusAC('loading'))
-    task_api.createTask(payload)
-        .then(res => {
-            if (res.data.resultCode === ResultCodeType.Ok) {
-                dispatch(createTaskAC(res.data.data.item))
-                dispatch(setAppStatusAC('successed'))
-            } else {
-                handleServerAppError(res.data, dispatch)
-            }
-        })
-        .catch((error) => {
-            handleServerNetworkError(error.message, dispatch)
-        })
-}
-export const deleteTaskTC = (payload: { todolistID: string, taskID: string }) => (dispatch: Dispatch<ThunkDispatchActionType>) => {
-    dispatch(setAppStatusAC('loading'))
-    task_api.deleteTask(payload)
-        .then(() => {
-            dispatch(deleteTaskAC(payload))
-            dispatch(setAppStatusAC('successed'))
-        }).catch(error => {
-            handleServerNetworkError(error.message, dispatch)
-        })
-}
+
+
+
 export const updateTaskTC = (payload: { todolistID: string, taskID: string, taskModel: UpdateTaskOptionalPropertiesType }) =>
     (dispatch: Dispatch<ThunkDispatchActionType>, getState: () => AppRootStoreType) => {
         dispatch(setAppStatusAC('loading'))
@@ -127,6 +93,17 @@ export const updateTaskTC = (payload: { todolistID: string, taskID: string, task
                 handleServerNetworkError(error.message, dispatch)
             })
     }
+
+
+//Saga
+//update task
+const updateTask = (payload: { todolistID: string, taskID: string, taskModel: UpdateTaskOptionalPropertiesType }) => (
+    { type: 'TASK/UPDATE-TASK' } as const
+)
+function* updateTaskWorkerSaga(action: ReturnType<typeof updateTask>) {
+
+}
+
 //types
 type TaskReducerActionType =
     | SetTodolistsACType

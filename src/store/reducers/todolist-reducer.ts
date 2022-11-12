@@ -1,5 +1,5 @@
 import { handleServerAppError, handleServerNetworkError } from './../utils/utils';
-import { setAppErrorAC, SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from './app-reducer';
+import { setAppErrorAC, SetAppErrorACType, setAppStatusAC, SetAppStatusACType } from '../../app/app-reducer';
 
 import { Dispatch } from "redux";
 import { todolist_api } from "../../api/todolist-api";

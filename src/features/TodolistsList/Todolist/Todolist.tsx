@@ -1,16 +1,16 @@
-import { Delete } from "@mui/icons-material"
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import { IconButton } from "@mui/material"
-import React, { MouseEvent, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 import { AddItem } from "../../../components/AddItem/AddItem"
 import { ChangeableTitle } from "../../../components/ChangeableTitle/ChangeableTitle"
 import { Switcher } from "../../../components/Switcher/Switcher"
-import { createTaskTC, deleteTaskTC, fetchTasksTC, updateTaskTC } from "../../../store/reducers/task-reducer"
+import { updateTaskTC } from "../../../store/reducers/task-reducer"
+import { createTask, deleteTask, fetchTasks } from '../../../store/reducers/tasks-sagas'
 import { changeTodolistTitleTC, deleteTodolistTC } from "../../../store/reducers/todolist-reducer"
 import { TaskStatus, TaskType } from "../../../types/TaskType"
 import { TodolistType } from "../../../types/TodolistType"
 import { Task } from "./Task/Task"
-import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 type FilterValueType = 'all' | 'active' | 'completed'
 type TodolistPropsType = {
     todolist: TodolistType
@@ -19,7 +19,7 @@ type TodolistPropsType = {
 export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...props }: TodolistPropsType) => {
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(fetchTasksTC(todolist.id))
+        dispatch(fetchTasks(todolist.id))
     }, [])
     const [filterValue, setFilterValue] = useState<FilterValueType>('all')
     //dispatch todolist TC
@@ -30,11 +30,11 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...
         dispatch(deleteTodolistTC(todolistID))
     }
     //dispatch task TC
-    const createTask = (title: string) => {
-        dispatch(createTaskTC({ todolistID: todolist.id, title }))
+    const createTaskHandler = (title: string) => {
+        dispatch(createTask({ todolistID: todolist.id, title }))
     }
-    const deleteTask = (payload: { todolistID: string, taskID: string }) => {
-        dispatch(deleteTaskTC(payload))
+    const deleteTaskHandler = (payload: { todolistID: string, taskID: string }) => {
+        dispatch(deleteTask(payload))
     }
     const changeTaskStatus = (payload: { todolistID: string, taskID: string, status: boolean }) => {
         const convertStatusToTaskStatusType = payload.status ? TaskStatus.Completed : TaskStatus.NotCompleted
@@ -74,14 +74,14 @@ export const Todolist: React.FC<TodolistPropsType> = React.memo(({ todolist, ...
                 <div className="todolist__title">
                     <ChangeableTitle disabled={disabledTodo} title={todolist.title} callback={(title) => changeTodolistTitle({ title, todolistID: todolist.id })} />
                 </div>
-                <AddItem callback={createTask} disabled={disabledTodo} />
+                <AddItem callback={createTaskHandler} disabled={disabledTodo} />
                 <ul className="todolist__tasks">
                     {
                         sortedTask(props.tasks, filterValue).map(task =>
                             <Task
                                 todolistRequestStatus={disabledTodo}
                                 task={task}
-                                deleteTask={deleteTask}
+                                deleteTask={deleteTaskHandler}
                                 changeTaskStatus={changeTaskStatus}
                                 changeTaskTitle={changeTaskTitle}
                                 key={task.id}

@@ -1,7 +1,7 @@
 import { Dispatch } from "redux"
-import { authAPI } from "../../api/auth-api"
-import { ResultCodeType } from "../../api/instance"
-import { setIsLoggedInAC } from "./auth-reducer"
+import { authAPI } from "../api/auth-api"
+import { ResultCodeType } from "../api/instance"
+import { setIsLoggedInAC } from "../store/reducers/auth-reducer"
 import { call, put } from 'redux-saga/effects'
 //initial state
 const initialState: InitialStateType = {
@@ -55,12 +55,4 @@ export type SetInitializedAppACType = ReturnType<typeof setInitializedAppAC>
 
 
 //create saga Action
-export const initializedApp = () => ({ type: 'APP/INITIALIZE-APP' } as const)
-//create saga worker
-export function* setInitializedApp(): any {
-    const res = yield call(authAPI.authMe)
-    if (res.data.resultCode === ResultCodeType.Ok) {
-        yield put(setIsLoggedInAC(true))
-    }
-    yield put(setInitializedAppAC(true))
-} 
+

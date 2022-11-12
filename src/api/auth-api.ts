@@ -14,7 +14,7 @@ export const authAPI = {
 }
 
 //types
-type authMeResponseType = {
+export type authMeResponseType = {
     id: number
     email: string
     login: string

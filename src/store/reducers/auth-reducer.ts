@@ -1,4 +1,4 @@
-import { setAppStatusAC, SetAppErrorACType, SetAppStatusACType } from './app-reducer';
+import { setAppStatusAC, SetAppErrorACType, SetAppStatusACType } from '../../app/app-reducer';
 import { authAPI } from '../../api/auth-api';
 import { Dispatch } from "redux"
 import { authDataType } from "../../api/auth-api"
@@ -57,6 +57,11 @@ export const logoutTC = () => (dispatch: Dispatch<ThunkDispatchActionType>) => {
             dispatch(setAppStatusAC('failed'))
         })
 }
+
+function* auth() {
+
+}
+
 type InitialStateType = {
     isLoggedIn: boolean
 }
