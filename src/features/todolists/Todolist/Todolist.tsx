@@ -8,18 +8,13 @@ import {
     changeFilter,
     FilterType
 } from '../../../common/reducers/filter-reducer';
-import {
-    useActions,
-    useAppDispatch,
-    useAppSelector
-} from '../../../store/store';
+import { useAppDispatch, useAppSelector } from '../../../store/store';
 import { TodolistType } from '../../../types/TodolistType';
 import { selectFilteredTasks } from '../selector';
 import { Task } from '../../task/Task';
-import { todolistAsyncActions } from '../todolist-reducer';
 
 import { createTask, fetchTasks } from '../../task/tasks-sagas';
-import { deleteTodolist } from '../todolist-sagas';
+import { changeTodolistTitle, deleteTodolist } from '../todolist-sagas';
 
 type TodolistPropsType = {
     todolist: TodolistType;
@@ -28,8 +23,6 @@ type TodolistPropsType = {
 
 export const Todolist: FC<TodolistPropsType> = React.memo(
     ({ todolist, todolistID }: TodolistPropsType) => {
-        const { changeTodolistTitle } = useActions(todolistAsyncActions);
-
         const dispatch = useAppDispatch();
 
         const tasks = useAppSelector((state) =>
@@ -67,10 +60,12 @@ export const Todolist: FC<TodolistPropsType> = React.memo(
                             disabled={disabledTodo}
                             title={todolist.title}
                             callback={(title) =>
-                                changeTodolistTitle({
-                                    title,
-                                    todolistID: todolist.id
-                                })
+                                dispatch(
+                                    changeTodolistTitle({
+                                        title,
+                                        todolistID: todolist.id
+                                    })
+                                )
                             }
                         />
                     </div>

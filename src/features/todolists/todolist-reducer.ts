@@ -1,18 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ResultCodeType } from '../../api/instance';
-import { todolist_api } from '../../api/todolist-api';
-import { setAppStatusAC } from '../../app/app-reducer';
-import { AppThunk } from '../../store/store';
-import {
-    handleServerAppError,
-    handleServerNetworkError
-} from '../../store/utils/utils';
+
 import {
     TodolistRequestStatus,
     TodolistResponseType,
     TodolistType
 } from '../../types/TodolistType';
-//reducer
+
 const slice = createSlice({
     name: 'todolists',
     initialState: [] as TodolistType[],
@@ -79,43 +72,3 @@ export const {
     changeTodolistRequestStatusAC
 } = slice.actions;
 export const actions = slice.actions;
-//thunks
-
-const changeTodolistTitle =
-    (payload: { todolistID: string; title: string }): AppThunk =>
-    async (dispatch) => {
-        dispatch(setAppStatusAC({ status: 'loading' }));
-        dispatch(
-            changeTodolistRequestStatusAC({
-                todolistID: payload.todolistID,
-                status: 'loading'
-            })
-        );
-        try {
-            const res = await todolist_api.changeTitle(payload);
-            if (res.data.resultCode === ResultCodeType.Ok) {
-                dispatch(setNewTodolistTitle(payload));
-                dispatch(
-                    changeTodolistRequestStatusAC({
-                        todolistID: payload.todolistID,
-                        status: 'successful'
-                    })
-                );
-                dispatch(setAppStatusAC({ status: 'succeeded' }));
-            } else {
-                handleServerAppError(res.data, dispatch);
-                dispatch(
-                    changeTodolistRequestStatusAC({
-                        todolistID: payload.todolistID,
-                        status: 'idle'
-                    })
-                );
-            }
-        } catch (error) {
-            handleServerNetworkError((error as Error).message, dispatch);
-        }
-    };
-
-export const todolistAsyncActions = {
-    changeTodolistTitle
-};

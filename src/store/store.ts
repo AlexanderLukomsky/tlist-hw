@@ -22,6 +22,7 @@ import thunk from 'redux-thunk';
 import { tasksWatcherSaga } from '../features/task/tasks-sagas';
 import { appWatcherSaga } from '../app/app-sagas';
 import { todolistWatcherSaga } from '../features/todolists/todolist-sagas';
+import { loginWatcherSaga } from '../features/auth/auth-sagas';
 
 const rootReducer = combineReducers({
     tasks: taskReducer,
@@ -46,7 +47,12 @@ export const useAppSelector: TypedUseSelectorHook<AppRootStoreType> =
 sagaMiddleware.run(rootWatcher);
 
 function* rootWatcher() {
-    yield all([appWatcherSaga(), tasksWatcherSaga(), todolistWatcherSaga()]);
+    yield all([
+        appWatcherSaga(),
+        tasksWatcherSaga(),
+        todolistWatcherSaga(),
+        loginWatcherSaga()
+    ]);
 }
 
 export type AppRootStoreType = ReturnType<typeof store.getState>;

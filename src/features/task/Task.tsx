@@ -6,16 +6,14 @@ import { FC } from 'react';
 import { ChangeableTitle } from '../../components/ChangeableTitle/ChangeableTitle';
 import { useAppDispatch } from '../../store/store';
 import { TaskStatus, TaskType } from '../../types/TaskType';
-import { tasksAsyncActions } from './task-reducer';
 
 import './task.scss';
-import { deleteTask } from './tasks-sagas';
+import { deleteTask, updateTask } from './tasks-sagas';
 
 type TaskPropsType = {
     task: TaskType;
 };
 export const Task: FC<TaskPropsType> = ({ task }) => {
-    const { updateTask } = tasksAsyncActions;
     const dispatch = useAppDispatch();
     const convertToBooleanStatus = (status: TaskStatus) => {
         switch (status) {

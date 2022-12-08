@@ -9,7 +9,8 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar';
-import { logoutTC } from '../features/auth/auth-reducer';
+import { logout } from '../features/auth/auth-sagas';
+
 import { Login } from '../features/auth/Login';
 import { selectIsLoggedIn } from '../features/auth/selectors';
 import { useAppDispatch } from '../store/store';
@@ -25,7 +26,7 @@ export const App: React.FC = () => {
 
     const dispatch = useAppDispatch();
     const logOut = () => {
-        dispatch(logoutTC());
+        dispatch(logout());
     };
     useEffect(() => {
         if (!isInitializedApp) {

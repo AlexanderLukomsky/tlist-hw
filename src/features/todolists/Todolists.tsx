@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { AddItem } from '../../components/AddItem/AddItem';
-import { useActions, useAppDispatch } from '../../store/store';
+import { useAppDispatch } from '../../store/store';
 import { selectIsLoggedIn } from '../auth/selectors';
 import { selectTodolists } from './selector';
-import { todolistAsyncActions } from './todolist-reducer';
 import { createTodolist, fetchTodolists } from './todolist-sagas';
 import { Todolist } from './Todolist/Todolist';
 
