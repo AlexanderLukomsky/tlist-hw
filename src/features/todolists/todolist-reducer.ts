@@ -116,36 +116,6 @@ const changeTodolistTitle =
         }
     };
 
-const deleteTodolist =
-    (todolistID: string): AppThunk =>
-    async (dispatch) => {
-        dispatch(
-            changeTodolistRequestStatusAC({ todolistID, status: 'loading' })
-        );
-        try {
-            await todolist_api.deleteTodolist(todolistID);
-            dispatch(deleteTodolistAC({ todolistID }));
-        } catch (err) {
-            handleServerNetworkError((err as Error).message, dispatch);
-        }
-    };
-
-const createTodolist =
-    (title: string): AppThunk =>
-    async (dispatch) => {
-        try {
-            const res = await todolist_api.createTodolist(title);
-            if (res.data.resultCode === ResultCodeType.Ok) {
-                dispatch(createTodolistAC({ todolist: res.data.data.item }));
-            } else {
-                handleServerAppError(res.data, dispatch);
-            }
-        } catch (err) {
-            handleServerNetworkError((err as Error).message, dispatch);
-        }
-    };
 export const todolistAsyncActions = {
-    changeTodolistTitle,
-    deleteTodolist,
-    createTodolist
+    changeTodolistTitle
 };

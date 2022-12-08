@@ -6,19 +6,22 @@ import { useActions, useAppDispatch } from '../../store/store';
 import { selectIsLoggedIn } from '../auth/selectors';
 import { selectTodolists } from './selector';
 import { todolistAsyncActions } from './todolist-reducer';
-import { fetchTodolists } from './todolist-sagas';
+import { createTodolist, fetchTodolists } from './todolist-sagas';
 import { Todolist } from './Todolist/Todolist';
 
 export const Todolists: React.FC = React.memo(() => {
     const dispatch = useAppDispatch();
-    const { createTodolist } = useActions(todolistAsyncActions);
+
     const isLoggedIn = useSelector(selectIsLoggedIn);
+
     const todolists = useSelector(selectTodolists);
+
     useEffect(() => {
         if (isLoggedIn) {
             dispatch(fetchTodolists());
         }
-    }, [isLoggedIn, createTodolist, fetchTodolists]);
+    }, [isLoggedIn, dispatch]);
+
     if (!isLoggedIn) return <Navigate to="/login" />;
 
     return (
@@ -27,7 +30,7 @@ export const Todolists: React.FC = React.memo(() => {
                 <AddItem
                     disabled={false}
                     callback={(title) => {
-                        createTodolist(title);
+                        dispatch(createTodolist(title));
                     }}
                 />
             </div>

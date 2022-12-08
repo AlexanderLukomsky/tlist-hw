@@ -19,26 +19,33 @@ import { Task } from '../../task/Task';
 import { todolistAsyncActions } from '../todolist-reducer';
 
 import { createTask, fetchTasks } from '../../task/tasks-sagas';
+import { deleteTodolist } from '../todolist-sagas';
+
 type TodolistPropsType = {
     todolist: TodolistType;
     todolistID: string;
 };
+
 export const Todolist: FC<TodolistPropsType> = React.memo(
     ({ todolist, todolistID }: TodolistPropsType) => {
-        const { changeTodolistTitle, deleteTodolist } =
-            useActions(todolistAsyncActions);
+        const { changeTodolistTitle } = useActions(todolistAsyncActions);
+
         const dispatch = useAppDispatch();
+
         const tasks = useAppSelector((state) =>
             selectFilteredTasks(state, todolistID)
         );
+
         useEffect(() => {
             dispatch(fetchTasks(todolist.id));
         }, [todolist.id, dispatch]);
-        //filter
+
         const onChangeFilter = (filterValue: FilterType) => {
             dispatch(changeFilter({ filterValue }));
         };
+
         const disabledTodo = todolist.requestStatus === 'loading';
+
         return (
             <div className="todolist-wrapper">
                 <div className="todolist">
@@ -47,7 +54,7 @@ export const Todolist: FC<TodolistPropsType> = React.memo(
                             size="large"
                             disabled={disabledTodo}
                             onClick={() => {
-                                deleteTodolist(todolist.id);
+                                dispatch(deleteTodolist(todolist.id));
                             }}
                         >
                             <HighlightOffOutlinedIcon
